@@ -2,130 +2,85 @@
 pragma solidity ^0.8.20;
 
 import {ConditionalPayment} from "./ConditionalPayment.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
-// PaymentFactory
-// Factory for deploying ConditionalPayment contracts
-// Creates and tracks all conditional payment instances
+/**
+ * @title PaymentFactory
+ * @dev Factory for deploying ConditionalPayment contracts with Goal, Split, and ERC20 support.
+ */
 contract PaymentFactory {
-    // Total number of payments created
+    using SafeERC20 for IERC20;
+
     uint256 public totalPayments;
-
-    // Mapping of payment ID to payment contract address
     mapping(uint256 => address) public payments;
-
-    // Mapping of user address to their payment IDs
     mapping(address => uint256[]) public userPayments;
 
-    // Available condition types
     enum ConditionType {
-        TIMESTAMP,    // Execute at specific timestamp
-        MANUAL,       // Execute upon manual approval
-        RECURRING,    // Execute on interval
-        ORACLE        // Execute based on oracle data (future)
+        TIMESTAMP,
+        MANUAL,
+        RECURRING,
+        ORACLE
     }
 
-    // Emitted when a new payment is created
     event PaymentCreated(
         uint256 indexed paymentId,
         address indexed paymentAddress,
         address indexed sender,
         address recipient,
-        uint256 amount,
+        address token,
+        uint256 totalAmount,
+        uint256 immediateAmount,
+        string goal,
+        ConditionType conditionType
+    );
+
+    /**
+     * @dev Create a new conditional payment with split and optional ERC20 token.
+     */
+    function createPayment(
+        address recipient,
+        address token,
+        uint256 totalAmount,
+        uint256 immediateAmount,
+        string calldata goal,
         ConditionType conditionType,
-        uint256 executeAt
-    );
-
-    // Emitted when a payment is executed
-    event PaymentExecuted(
-        uint256 indexed paymentId,
-        address indexed paymentAddress,
-        address recipient,
-        uint256 amount
-    );
-
-    // Emitted when a payment is refunded
-    event PaymentRefunded(
-        uint256 indexed paymentId,
-        address indexed paymentAddress,
-        address sender,
-        uint256 amount
-    );
-
-    // Create a new time-based conditional payment
-    function createTimeBasedPayment(
-        address recipient,
-        uint256 executeAt
+        bytes calldata conditionData
     ) external payable returns (address paymentAddress) {
         require(recipient != address(0), "Invalid recipient");
-        require(msg.value > 0, "Amount must be > 0");
-        require(executeAt > block.timestamp, "Timestamp must be in future");
-        require(executeAt <= block.timestamp + 365 days, "Too far in future");
+        require(totalAmount > 0, "Amount must be > 0");
+        require(immediateAmount <= totalAmount, "Invalid split");
 
-        return _createPayment(
-            recipient,
-            ConditionType.TIMESTAMP,
-            abi.encode(executeAt)
-        );
-    }
+        // Handle token transfer if ERC20
+        if (token != address(0)) {
+            require(msg.value == 0, "Native value with ERC20");
+            IERC20(token).safeTransferFrom(msg.sender, address(this), totalAmount);
+        } else {
+            require(msg.value == totalAmount, "Value mismatch");
+        }
 
-    // Create a new manual approval payment
-    function createManualPayment(
-        address recipient,
-        address[] calldata approvers,
-        uint256 requiredApprovals
-    ) external payable returns (address paymentAddress) {
-        require(recipient != address(0), "Invalid recipient");
-        require(msg.value > 0, "Amount must be > 0");
-        require(approvers.length > 0, "Need approvers");
-        require(requiredApprovals > 0 && requiredApprovals <= approvers.length, "Invalid threshold");
-
-        return _createPayment(
-            recipient,
-            ConditionType.MANUAL,
-            abi.encode(approvers, requiredApprovals)
-        );
-    }
-
-    // Create a new recurring payment
-    function createRecurringPayment(
-        address recipient,
-        uint256 startTime,
-        uint256 interval,
-        uint256 occurrences
-    ) external payable returns (address paymentAddress) {
-        require(recipient != address(0), "Invalid recipient");
-        require(msg.value > 0, "Amount must be > 0");
-        require(interval >= 1 days, "Interval too short");
-        require(interval <= 365 days, "Interval too long");
-        require(startTime >= block.timestamp, "Start time in past");
-
-        return _createPayment(
-            recipient,
-            ConditionType.RECURRING,
-            abi.encode(startTime, interval, occurrences)
-        );
-    }
-
-    // Internal function to deploy a ConditionalPayment contract
-    function _createPayment(
-        address recipient,
-        ConditionType conditionType,
-        bytes memory conditionData
-    ) internal returns (address) {
         totalPayments++;
         uint256 paymentId = totalPayments;
 
         ConditionalPayment payment = new ConditionalPayment{
-            value: msg.value
+            value: token == address(0) ? totalAmount : 0
         }(
             msg.sender,
             recipient,
-            msg.value,
+            token,
+            totalAmount,
+            immediateAmount,
+            goal,
             uint8(conditionType),
             conditionData
         );
 
-        address paymentAddress = address(payment);
+        // If ERC20, transfer the tokens from factory to the new payment contract
+        if (token != address(0)) {
+            IERC20(token).safeTransfer(address(payment), totalAmount);
+        }
+
+        paymentAddress = address(payment);
         payments[paymentId] = paymentAddress;
         userPayments[msg.sender].push(paymentId);
 
@@ -134,31 +89,67 @@ contract PaymentFactory {
             paymentAddress,
             msg.sender,
             recipient,
-            msg.value,
-            conditionType,
-            block.timestamp
+            token,
+            totalAmount,
+            immediateAmount,
+            goal,
+            conditionType
         );
 
         return paymentAddress;
     }
 
-    // Get payment address by ID
+    // Helper functions for common payment types
+    
+    function createTimeBasedPayment(
+        address recipient,
+        address token,
+        uint256 totalAmount,
+        uint256 immediateAmount,
+        string calldata goal,
+        uint256 executeAt
+    ) external payable returns (address) {
+        return this.createPayment{value: msg.value}(
+            recipient,
+            token,
+            totalAmount,
+            immediateAmount,
+            goal,
+            ConditionType.TIMESTAMP,
+            abi.encode(executeAt)
+        );
+    }
+
+    function createManualPayment(
+        address recipient,
+        address token,
+        uint256 totalAmount,
+        uint256 immediateAmount,
+        string calldata goal,
+        address[] calldata approvers,
+        uint256 requiredApprovals
+    ) external payable returns (address) {
+        return this.createPayment{value: msg.value}(
+            recipient,
+            token,
+            totalAmount,
+            immediateAmount,
+            goal,
+            ConditionType.MANUAL,
+            abi.encode(approvers, requiredApprovals)
+        );
+    }
+
+    // View functions
     function getPayment(uint256 paymentId) external view returns (address) {
         return payments[paymentId];
     }
 
-    // Get all payment IDs for a user
     function getUserPaymentIds(address user) external view returns (uint256[] memory) {
         return userPayments[user];
     }
 
-    // Get count of payments for a user
     function getUserPaymentCount(address user) external view returns (uint256) {
         return userPayments[user].length;
-    }
-
-    // Check if payment ID exists
-    function paymentExists(uint256 paymentId) external view returns (bool) {
-        return paymentId > 0 && paymentId <= totalPayments;
     }
 }
