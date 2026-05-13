@@ -17,7 +17,7 @@ export default function Navbar() {
             <ShieldCheck size={18} className="text-black" />
           </div>
           <span className="text-xl font-black tracking-tight bg-gradient-to-r from-green-400 to-emerald-300 bg-clip-text text-transparent">
-            PayWhen
+            IntentRemit
           </span>
         </Link>
 

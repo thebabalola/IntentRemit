@@ -8,9 +8,9 @@ import { mainnet } from "@reown/appkit/networks";
 const projectId = process.env.NEXT_PUBLIC_REOWN_PROJECT_ID || "";
 
 const metadata = {
-  name: "PayWhen",
-  description: "PayWhen — Intent-based payment protocol",
-  url: "https://paywhen.vercel.app",
+  name: "IntentRemit",
+  description: "IntentRemit — Intent-based remittance protocol",
+  url: "https://intentremit.vercel.app",
   icons: ["https://avatars.githubusercontent.com/u/37784886"],
 };
 
@@ -61,7 +61,6 @@ export function ReownProvider({ children }: { children: ReactNode }) {
 
   const handleSession = (session: any) => {
     setIsConnected(true);
-    // TODO: parse Stacks address from session.namespaces if needed
   };
 
   const open = async () => {

@@ -24,7 +24,7 @@ export default function SecurityNotice() {
       <div className="flex-1 min-w-0">
         <p style={{ color: "var(--foreground-muted)", fontSize: 12, lineHeight: 1.6 }}>
           <span style={{ color: "#B8891A", fontWeight: 800 }}>Heads up — </span>
-          PayWhen is still under development and yet to be fully audited. Please don&apos;t deposit real funds just yet.
+          IntentRemit is still under development and yet to be fully audited. Please don&apos;t deposit real funds just yet.
         </p>
       </div>
       <button

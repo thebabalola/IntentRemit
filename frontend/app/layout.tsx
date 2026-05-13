@@ -5,54 +5,51 @@ import ClientLayout from "@/components/ClientLayout";
 import Navbar from "@/components/Navbar";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://paywhen.vercel.app"),
+  metadataBase: new URL("https://intentremit.vercel.app"),
   title: {
-    template: "%s | PayWhen",
-    default: "PayWhen — Conditional Payment Protocol",
+    template: "%s | IntentRemit",
+    default: "IntentRemit — Programmable Purposeful Remittance",
   },
   description:
-    "PayWhen is an intent-based payment protocol that allows users to define conditions under which funds are automatically executed on-chain.",
+    "IntentRemit is an intent-based remittance protocol that allows users to define goals and conditions for cross-border transfers on Celo.",
   keywords: [
-    "PayWhen",
+    "IntentRemit",
+    "remittance",
     "conditional payments",
-    "escrow",
+    "growth vault",
     "Celo",
     "DeFi",
-    "smart contracts",
+    "stablecoins",
   ],
-  authors: [{ name: "PayWhen Protocol" }],
-  creator: "PayWhen Protocol",
+  authors: [{ name: "IntentRemit Protocol" }],
+  creator: "IntentRemit Protocol",
   openGraph: {
     type: "website",
-    title: "PayWhen — Conditional Payment Protocol",
+    title: "IntentRemit — Purposeful Remittance Protocol",
     description:
-      "Intent-based conditional payments with on-chain escrow and automatic execution.",
-    siteName: "PayWhen",
+      "Send money with purpose. Split payments between immediate needs and long-term growth vaults.",
+    siteName: "IntentRemit",
     images: [
-      { url: "/paywhen-logo.png", width: 512, height: 512, alt: "PayWhen Logo" },
+      { url: "/intentremit-logo.svg", width: 512, height: 512, alt: "IntentRemit Logo" },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "PayWhen — Conditional Payments",
+    title: "IntentRemit — Purposeful Remittance",
     description:
-      "PayWhen: Define conditions, hold in escrow, automatic execution.",
-    images: ["/paywhen-logo.png"],
+      "IntentRemit: Purposeful remittance with automated splits and growth vaults.",
+    images: ["/intentremit-logo.svg"],
   },
   icons: {
-    icon: "/paywhen.svg",
-    shortcut: "/paywhen.svg",
-    apple: "/paywhen.svg",
+    icon: "/intentremit-logo.svg",
+    shortcut: "/intentremit-logo.svg",
+    apple: "/intentremit-logo.svg",
   },
   robots: { index: true, follow: true },
-  other: {
-    "talentapp:project_verification":
-      "f7c5e13669525ccc934a994861757841cddf441819478b371dcf13769e6007339ceb2d37e7efe588b1eac0eea0904cae3bd30cbd8c9402c9228c58eb2344069a",
-  },
 };
 
 export const viewport: Viewport = {
-  themeColor: [{ media: "(prefers-color-scheme: dark)", color: "#090A06" }],
+  themeColor: [{ media: "(prefers-color-scheme: dark)", color: "#050505" }],
   width: "device-width",
   initialScale: 1,
 };

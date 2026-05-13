@@ -12,10 +12,10 @@ const queryClient = new QueryClient()
 const projectId = process.env.NEXT_PUBLIC_REOWN_PROJECT_ID || 'placeholder-build-id'
 
 const metadata = {
-  name: 'PayWhen',
-  description: 'Conditional payment protocol for on-chain escrow and automatic execution',
-  url: 'https://paywhen.vercel.app',
-  icons: ['/paywhen.svg'],
+  name: 'IntentRemit',
+  description: 'Intent-based remittance protocol for purposeful transfers on Celo',
+  url: 'https://intentremit.vercel.app',
+  icons: ['/favicon.ico'],
 }
 
 const wagmiAdapter = new WagmiAdapter({
@@ -24,7 +24,6 @@ const wagmiAdapter = new WagmiAdapter({
   ssr: true,
 })
 
-// Called unconditionally at module level — mirrors AION pattern so useAppKit always works
 createAppKit({
   adapters: [wagmiAdapter],
   networks: [celo, celoAlfajores],
@@ -38,10 +37,10 @@ createAppKit({
   },
   themeMode: 'dark',
   themeVariables: {
-    '--w3m-accent': '#8FA828',
-    '--w3m-color-mix': '#090A06',
+    '--w3m-accent': '#22c55e',
+    '--w3m-color-mix': '#050505',
     '--w3m-color-mix-strength': 20,
-    '--w3m-border-radius-master': '3px',
+    '--w3m-border-radius-master': '12px',
   },
 })
 
