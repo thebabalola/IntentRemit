@@ -43,9 +43,11 @@ contract ConditionalPayment is ReentrancyGuard {
     bytes public oracleData;       // For ORACLE
 
     // Manual approval tracking
-    mapping(address => bool) public approvedBy;
-    address[] public approvers;
     uint256 public requiredApprovals;
+
+    // Growth Vault / Yield Integration (Placeholder for Phase 2)
+    address public yieldPool;
+    bool public isYieldBearing;
 
     uint256 public constant REFUND_TIMEOUT = 30 days;
 
@@ -193,12 +195,26 @@ contract ConditionalPayment is ReentrancyGuard {
     }
 
     function _transfer(address _to, uint256 _amount) internal {
+        if (isYieldBearing && _to == recipient) {
+            _withdrawFromYield(_amount);
+        }
+
         if (token == address(0)) {
             (bool success, ) = _to.call{value: _amount}("");
             require(success, "Native transfer failed");
         } else {
             IERC20(token).safeTransfer(_to, _amount);
         }
+    }
+
+    function _depositToYield(uint256 _amount) internal {
+        // TODO: Integrate with Celo yield protocol (e.g. Moola, Aave)
+        // 1. Approve yield pool
+        // 2. Deposit _amount
+    }
+
+    function _withdrawFromYield(uint256 _amount) internal {
+        // TODO: Withdraw from yield pool before transfer
     }
 
     function _currentBalance() internal view returns (uint256) {
