@@ -6,11 +6,6 @@ import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import {IConditionOracle} from "./IConditionOracle.sol";
 
-/**
- * @title ConditionalPayment
- * @dev Escrow contract for conditional payments with Goal and Split support.
- * Supports both Native (CELO) and ERC20 (cUSD) tokens.
- */
 contract ConditionalPayment is ReentrancyGuard {
     using SafeERC20 for IERC20;
 
@@ -123,9 +118,6 @@ contract ConditionalPayment is ReentrancyGuard {
         }
     }
 
-    /**
-     * @dev Release the immediate portion of the split.
-     */
     function executeImmediate() external nonReentrant {
         require(!immediateExecuted, "Immediate already executed");
         require(!refunded, "Already refunded");
@@ -136,9 +128,6 @@ contract ConditionalPayment is ReentrancyGuard {
         emit PaymentExecuted(address(this), recipient, immediateAmount, true);
     }
 
-    /**
-     * @dev Release the locked portion if conditions are met.
-     */
     function executeLocked() external nonReentrant {
         require(!lockedExecuted, "Locked already executed");
         require(!refunded, "Already refunded");

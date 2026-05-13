@@ -5,10 +5,6 @@ import {ConditionalPayment} from "./ConditionalPayment.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
-/**
- * @title PaymentFactory
- * @dev Factory for deploying ConditionalPayment contracts with Goal, Split, and ERC20 support.
- */
 contract PaymentFactory {
     using SafeERC20 for IERC20;
 
@@ -35,9 +31,6 @@ contract PaymentFactory {
         ConditionType conditionType
     );
 
-    /**
-     * @dev Create a new conditional payment with split and optional ERC20 token.
-     */
     function createPayment(
         address recipient,
         address token,
