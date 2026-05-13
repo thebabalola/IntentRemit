@@ -1,7 +1,7 @@
 'use client'
 
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
-import { parseEther, formatEther } from 'viem'
+import { parseUnits, formatUnits, parseEther, formatEther } from 'viem'
 import { PAYMENT_FACTORY_ADDRESS } from './constants'
 import { PaymentFactoryABI, ConditionalPaymentABI } from './contracts'
 
@@ -38,21 +38,29 @@ export function useCreateTimestampPayment() {
 
   async function createTimestampPayment({
     recipient,
-    amount,
+    token,
+    totalAmount,
+    immediateAmount,
+    goal,
     executeAt,
   }: {
     recipient: `0x${string}`
-    amount: string
+    token: `0x${string}`
+    totalAmount: string
+    immediateAmount: string
+    goal: string
     executeAt: bigint
   }) {
-    if (!recipient || !amount) throw new Error('Recipient and amount required')
+    const isNative = token === '0x0000000000000000000000000000000000000000'
+    const totalRaw = parseEther(totalAmount)
+    const immediateRaw = parseEther(immediateAmount)
 
     writeContract({
       address: PAYMENT_FACTORY_ADDRESS,
       abi: PaymentFactoryABI,
       functionName: 'createTimeBasedPayment',
-      value: parseEther(amount),
-      args: [recipient, executeAt]
+      value: isNative ? totalRaw : 0n,
+      args: [recipient, token, totalRaw, immediateRaw, goal, executeAt]
     })
   }
 
@@ -66,63 +74,37 @@ export function useCreateManualPayment() {
 
   async function createManualPayment({
     recipient,
-    amount,
+    token,
+    totalAmount,
+    immediateAmount,
+    goal,
     approvers,
     requiredApprovals = 1n,
   }: {
     recipient: `0x${string}`
-    amount: string
+    token: `0x${string}`
+    totalAmount: string
+    immediateAmount: string
+    goal: string
     approvers: `0x${string}`[]
     requiredApprovals?: bigint
   }) {
-    if (!recipient || !amount || approvers.length === 0) {
-      throw new Error('Recipient, amount, and at least one approver required')
-    }
+    const isNative = token === '0x0000000000000000000000000000000000000000'
+    const totalRaw = parseEther(totalAmount)
+    const immediateRaw = parseEther(immediateAmount)
 
     writeContract({
       address: PAYMENT_FACTORY_ADDRESS,
       abi: PaymentFactoryABI,
       functionName: 'createManualPayment',
-      value: parseEther(amount),
-      args: [recipient, approvers, requiredApprovals]
+      value: isNative ? totalRaw : 0n,
+      args: [recipient, token, totalRaw, immediateRaw, goal, approvers, requiredApprovals]
     })
   }
 
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
 
   return { createManualPayment, hash, isPending, isConfirming, isSuccess, error }
-}
-
-export function useCreateRecurringPayment() {
-  const { writeContract, data: hash, isPending, error } = useWriteContract()
-
-  async function createRecurringPayment({
-    recipient,
-    amount,
-    startTime,
-    interval,
-    occurrences
-  }: {
-    recipient: `0x${string}`
-    amount: string
-    startTime: bigint
-    interval: bigint
-    occurrences: bigint
-  }) {
-    if (!recipient || !amount) throw new Error('Recipient and amount required')
-
-    writeContract({
-      address: PAYMENT_FACTORY_ADDRESS,
-      abi: PaymentFactoryABI,
-      functionName: 'createRecurringPayment',
-      value: parseEther(amount),
-      args: [recipient, startTime, interval, occurrences]
-    })
-  }
-
-  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
-
-  return { createRecurringPayment, hash, isPending, isConfirming, isSuccess, error }
 }
 
 // ============================================================================
@@ -134,15 +116,16 @@ export function useConditionalPayment(paymentAddress: `0x${string}` | undefined)
 
   const { data: sender } = useReadContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'sender', query: { enabled } })
   const { data: recipient } = useReadContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'recipient', query: { enabled } })
-  const { data: amount } = useReadContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'amount', query: { enabled } })
+  const { data: token } = useReadContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'token', query: { enabled } })
+  const { data: totalAmount } = useReadContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'totalAmount', query: { enabled } })
+  const { data: immediateAmount } = useReadContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'immediateAmount', query: { enabled } })
+  const { data: lockedAmount } = useReadContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'lockedAmount', query: { enabled } })
+  const { data: goal } = useReadContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'goal', query: { enabled } })
   const { data: conditionType } = useReadContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'conditionType', query: { enabled } })
-  const { data: executed } = useReadContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'executed', query: { enabled } })
+  const { data: immediateExecuted } = useReadContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'immediateExecuted', query: { enabled } })
+  const { data: lockedExecuted } = useReadContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'lockedExecuted', query: { enabled } })
   const { data: refunded } = useReadContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'refunded', query: { enabled } })
   const { data: executeAt } = useReadContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'executeAt', query: { enabled } })
-  const { data: startTime } = useReadContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'startTime', query: { enabled } })
-  const { data: interval } = useReadContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'interval', query: { enabled } })
-  const { data: occurrences } = useReadContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'occurrences', query: { enabled } })
-  const { data: executedCount } = useReadContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'executedCount', query: { enabled } })
   const { data: requiredApprovals } = useReadContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'requiredApprovals', query: { enabled } })
   const { data: approvalCount } = useReadContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'getApprovalCount', query: { enabled } })
   const { data: canExecute } = useReadContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'checkCondition', query: { enabled } })
@@ -150,27 +133,36 @@ export function useConditionalPayment(paymentAddress: `0x${string}` | undefined)
   return {
     sender,
     recipient,
-    amount: amount ? formatEther(amount as bigint) : undefined,
-    amountRaw: amount as bigint | undefined,
+    token,
+    totalAmount: totalAmount ? formatEther(totalAmount as bigint) : undefined,
+    immediateAmount: immediateAmount ? formatEther(immediateAmount as bigint) : undefined,
+    lockedAmount: lockedAmount ? formatEther(lockedAmount as bigint) : undefined,
+    goal: goal as string | undefined,
     conditionType: conditionType as number | undefined,
-    executed: executed as boolean | undefined,
+    immediateExecuted: immediateExecuted as boolean | undefined,
+    lockedExecuted: lockedExecuted as boolean | undefined,
     refunded: refunded as boolean | undefined,
     executeAt: executeAt as bigint | undefined,
-    startTime: startTime as bigint | undefined,
-    interval: interval as bigint | undefined,
-    occurrences: occurrences as bigint | undefined,
-    executedCount: executedCount as bigint | undefined,
     requiredApprovals: requiredApprovals as bigint | undefined,
     approvalCount: approvalCount as bigint | undefined,
     canExecute: canExecute as boolean | undefined,
-    isLoading: enabled && (amount === undefined) // Simple loading check
+    isLoading: enabled && (totalAmount === undefined)
   }
 }
 
-export function useExecutePayment() {
+export function useExecuteImmediate() {
   const { writeContract, data: hash, isPending, error } = useWriteContract()
   async function execute(paymentAddress: `0x${string}`) {
-    writeContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'execute' })
+    writeContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'executeImmediate' })
+  }
+  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
+  return { execute, hash, isPending, isConfirming, isSuccess, error }
+}
+
+export function useExecuteLocked() {
+  const { writeContract, data: hash, isPending, error } = useWriteContract()
+  async function execute(paymentAddress: `0x${string}`) {
+    writeContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'executeLocked' })
   }
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
   return { execute, hash, isPending, isConfirming, isSuccess, error }
