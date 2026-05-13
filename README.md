@@ -231,4 +231,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 
-*Project maintained by @thebabalola.*
+*Project maintained by @bbkenny.*
