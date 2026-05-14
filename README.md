@@ -104,6 +104,14 @@ IntentRemit introduces **programmable financial intent** into remittances:
 
 ---
 
+## 🚀 Deployment Status
+
+### Celo Mainnet
+- **PaymentFactory**: [`0xf3850044Ee8d0498Cf07C5e820dd7Dd923fe869E`](https://celoscan.io/address/0xf3850044Ee8d0498Cf07C5e820dd7Dd923fe869E)
+- **ConditionOracle**: [`0x81BCf3F9aBB2fAa06732Cd3A7190490C9708f0C6`](https://celoscan.io/address/0x81BCf3F9aBB2fAa06732Cd3A7190490C9708f0C6)
+
+---
+
 ### 🧠 AI Layer
 
 - Rule-based engine (MVP)
