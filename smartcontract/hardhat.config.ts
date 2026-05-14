@@ -131,10 +131,7 @@ const config: HardhatUserConfig = {
     },
     celo: {
       url: "https://forno.celo.org",
-      accounts: [deployerPrivateKey],
-    },
-    celoAlfajores: {
-      url: "https://alfajores-forno.celo-testnet.org",
+      chainId: 42220,
       accounts: [deployerPrivateKey],
     },
   },
@@ -148,14 +145,6 @@ const config: HardhatUserConfig = {
         urls: {
           apiURL: "https://api.celoscan.io/api",
           browserURL: "https://celoscan.io"
-        }
-      },
-      {
-        network: "celoAlfajores",
-        chainId: 44787,
-        urls: {
-          apiURL: "https://api-alfajores.celoscan.io/api",
-          browserURL: "https://alfajores.celoscan.io"
         }
       }
     ]
