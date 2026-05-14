@@ -30,7 +30,7 @@ export const metadata: Metadata = {
       "Send money with purpose. Split payments between immediate needs and long-term growth vaults.",
     siteName: "IntentRemit",
     images: [
-      { url: "/intentremit-logo.svg", width: 512, height: 512, alt: "IntentRemit Logo" },
+      { url: "/logo.png", width: 512, height: 512, alt: "IntentRemit Logo" },
     ],
   },
   twitter: {
@@ -38,12 +38,12 @@ export const metadata: Metadata = {
     title: "IntentRemit — Purposeful Remittance",
     description:
       "IntentRemit: Purposeful remittance with automated splits and growth vaults.",
-    images: ["/intentremit-logo.svg"],
+    images: ["/logo.png"],
   },
   icons: {
-    icon: "/intentremit-logo.svg",
-    shortcut: "/intentremit-logo.svg",
-    apple: "/intentremit-logo.svg",
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
   },
   robots: { index: true, follow: true },
 };
@@ -60,8 +60,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="antialiased bg-black selection:bg-green-500/30">
+    <html lang="en" suppressHydrationWarning>
+      <body className="antialiased bg-black selection:bg-green-500/30" suppressHydrationWarning>
         <Web3Provider>
           <Navbar />
           <ClientLayout>{children}</ClientLayout>

@@ -196,6 +196,7 @@ export default function Home() {
                           >
                             {g}
                           </button>
+                        ))}
                       </div>
                       
                       {aiSuggestion && (
@@ -278,7 +279,6 @@ export default function Home() {
                       />
                         <span>Recipient Gets Now: {immediateAmount}</span>
                         <span>To Growth Vault: {Number((parseFloat(totalAmount || "0") - parseFloat(immediateAmount)).toFixed(8)).toString()}</span>
-                      </div>
                       
                       {/* Growth Vault Visualization */}
                       <div className="mt-4 p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-xl flex items-center justify-between">
