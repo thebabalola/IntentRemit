@@ -10,14 +10,6 @@ export const CELO_MAINNET = {
   blockExplorerUrls: { default: 'https://celoscan.io' }
 } as const
 
-export const CELO_ALFAJORES = {
-  chainId: 44787,
-  name: 'Celo Alfajores',
-  nativeCurrency: { name: 'Celo', symbol: 'CELO', decimals: 18 },
-  rpcUrls: { default: { http: ['https://alfajores-forno.celo-testnet.org'] } },
-  blockExplorerUrls: { default: 'https://alfajores.celoscan.io' }
-} as const
-
 // ConditionalPayment condition types
 export enum ConditionType {
   TIMESTAMP = 0,
@@ -26,11 +18,10 @@ export enum ConditionType {
   ORACLE = 3
 }
 
-// Supported networks for deployment
+// Supported networks
 export const SUPPORTED_NETWORKS = {
-  celo: CELO_MAINNET,
-  celoAlfajores: CELO_ALFAJORES
+  celo: CELO_MAINNET
 } as const
 
-// Default network for deployments
+// Default network
 export const DEFAULT_NETWORK = 'celo' as const
