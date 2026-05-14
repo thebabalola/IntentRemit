@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useAccount, useBalance, useReadContract } from "wagmi";
 import { parseEther, formatEther, erc20Abi } from "viem";
 import { motion, AnimatePresence } from "framer-motion";
