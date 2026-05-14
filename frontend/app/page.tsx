@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useAccount, useBalance } from "wagmi";
-import { parseEther, formatEther } from "viem";
+import { useAccount, useBalance, useReadContract } from "wagmi";
+import { parseEther, formatEther, erc20Abi } from "viem";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Plus, 
@@ -49,10 +49,30 @@ export default function Home() {
   const [requiredApprovals, setRequiredApprovals] = useState("1");
 
   const { data: userPaymentsData, isLoading: loadingPayments } = useUserPayments(address || '0x');
-  const { data: balanceData } = useBalance({
+  const isNative = token === "0x0000000000000000000000000000000000000000";
+  const { data: nativeBalance } = useBalance({
     address,
-    token: token === "0x0000000000000000000000000000000000000000" ? undefined : (token as `0x${string}`),
+    query: { enabled: isNative && !!address }
   });
+  const { data: tokenBalance } = useReadContract({
+    address: isNative ? undefined : (token as `0x${string}`),
+    abi: erc20Abi,
+    functionName: 'balanceOf',
+    args: address ? [address] : undefined,
+    query: { enabled: !isNative && !!address }
+  });
+
+  const balanceData = useMemo(() => {
+    if (isNative) return nativeBalance;
+    if (tokenBalance !== undefined) {
+      return {
+        formatted: formatEther(tokenBalance as bigint),
+        symbol: token === "0x765DE816845861e75A25fCA122bb6898B8B1282a" ? "cUSD" : "TOKEN",
+        decimals: 18
+      };
+    }
+    return undefined;
+  }, [isNative, nativeBalance, tokenBalance, token]);
   const createTimestamp = useCreateTimestampPayment();
   const createManual = useCreateManualPayment();
 
