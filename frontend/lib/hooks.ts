@@ -60,7 +60,8 @@ export function useCreateTimestampPayment() {
       abi: PaymentFactoryABI,
       functionName: 'createTimeBasedPayment',
       value: isNative ? totalRaw : 0n,
-      args: [recipient, token, totalRaw, immediateRaw, goal, executeAt]
+      args: [recipient, token, totalRaw, immediateRaw, goal, executeAt],
+      type: 'legacy'
     })
   }
 
@@ -98,7 +99,8 @@ export function useCreateManualPayment() {
       abi: PaymentFactoryABI,
       functionName: 'createManualPayment',
       value: isNative ? totalRaw : 0n,
-      args: [recipient, token, totalRaw, immediateRaw, goal, approvers, requiredApprovals]
+      args: [recipient, token, totalRaw, immediateRaw, goal, approvers, requiredApprovals],
+      type: 'legacy'
     })
   }
 
@@ -151,7 +153,7 @@ export function useConditionalPayment(paymentAddress: `0x${string}` | undefined)
 export function useExecuteImmediate() {
   const { writeContract, data: hash, isPending, error } = useWriteContract()
   async function execute(paymentAddress: `0x${string}`) {
-    writeContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'executeImmediate' })
+    writeContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'executeImmediate', type: 'legacy' })
   }
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
   return { execute, hash, isPending, isConfirming, isSuccess, error }
@@ -160,7 +162,7 @@ export function useExecuteImmediate() {
 export function useExecuteLocked() {
   const { writeContract, data: hash, isPending, error } = useWriteContract()
   async function execute(paymentAddress: `0x${string}`) {
-    writeContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'executeLocked' })
+    writeContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'executeLocked', type: 'legacy' })
   }
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
   return { execute, hash, isPending, isConfirming, isSuccess, error }
@@ -169,7 +171,7 @@ export function useExecuteLocked() {
 export function useRefundPayment() {
   const { writeContract, data: hash, isPending, error } = useWriteContract()
   async function refund(paymentAddress: `0x${string}`) {
-    writeContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'refund' })
+    writeContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'refund', type: 'legacy' })
   }
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
   return { refund, hash, isPending, isConfirming, isSuccess, error }
@@ -178,7 +180,7 @@ export function useRefundPayment() {
 export function useApprovePayment() {
   const { writeContract, data: hash, isPending, error } = useWriteContract()
   async function approve(paymentAddress: `0x${string}`) {
-    writeContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'approveManual' })
+    writeContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: 'approveManual', type: 'legacy' })
   }
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
   return { approve, hash, isPending, isConfirming, isSuccess, error }

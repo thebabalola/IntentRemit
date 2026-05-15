@@ -1,10 +1,25 @@
 "use client";
 
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ShieldCheck } from "lucide-react";
+import { useConnect, useAccount } from "wagmi";
+import { injected } from "wagmi/connectors";
 
 export default function Navbar() {
+  const { connect } = useConnect();
+  const { isConnected } = useAccount();
+  const [isMiniPay, setIsMiniPay] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && (window as any).ethereum?.isMiniPay) {
+      setIsMiniPay(true);
+      if (!isConnected) {
+        connect({ connector: injected() });
+      }
+    }
+  }, [connect, isConnected]);
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 px-6 py-4">
       <motion.div 
@@ -32,7 +47,12 @@ export default function Navbar() {
         </nav>
 
         <div className="flex items-center gap-4">
-          <appkit-button />
+          {!isMiniPay && <appkit-button />}
+          {isMiniPay && isConnected && (
+            <div className="px-4 py-2 bg-green-500/10 border border-green-500/20 rounded-xl text-[10px] font-black uppercase text-green-400 tracking-widest">
+              MiniPay Active
+            </div>
+          )}
         </div>
       </motion.div>
     </header>
