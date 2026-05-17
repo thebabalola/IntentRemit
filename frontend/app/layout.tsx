@@ -46,6 +46,9 @@ export const metadata: Metadata = {
     apple: "/intentremit-logo.svg",
   },
   robots: { index: true, follow: true },
+  other: {
+    "talentapp:project_verification": "01872b469c464da6d5d19b345a1eac2aa826d7ab4e6c0a60eb3105e034002eea6629b8eea66a341578b8853ae79d62d247030406a1c00309d2f16474363da045",
+  },
 };
 
 export const viewport: Viewport = {
