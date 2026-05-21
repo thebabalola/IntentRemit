@@ -160,11 +160,11 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#020503] via-[#050a06] to-[#010302] text-white selection:bg-green-500/30 overflow-x-hidden">
+    <main className="min-h-screen bg-gradient-to-b from-[#050502] via-[#0b0a05] to-[#020201] text-white selection:bg-celoyellow/30 overflow-x-hidden">
       {/* Animated Background Gradients */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-green-500/10 blur-[120px] rounded-full animate-pulse" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-emerald-500/10 blur-[120px] rounded-full animate-pulse delay-700" />
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-celoyellow/10 blur-[120px] rounded-full animate-pulse" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-celogold/10 blur-[120px] rounded-full animate-pulse delay-700" />
       </div>
 
       <div className="max-w-6xl mx-auto px-6 pt-32 pb-20 relative z-10">
@@ -174,11 +174,11 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-xs font-bold tracking-widest uppercase mb-6">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-celoyellow/10 border border-celoyellow/20 text-celoyellow text-xs font-bold tracking-widest uppercase mb-6">
             <ShieldCheck size={14} /> Programmable Purpose
           </div>
           <h1 className="text-6xl md:text-7xl font-black mb-6 tracking-tight">
-            Intent <span className="bg-gradient-to-r from-green-400 to-emerald-300 bg-clip-text text-transparent italic">Remit</span>
+            Intent <span className="bg-gradient-to-r from-celoyellow to-celogold bg-clip-text text-transparent italic">Remit</span>
           </h1>
           <p className="text-gray-400 text-xl max-w-2xl mx-auto font-medium">
             Send money with purpose. Define the goal, split the payout, and ensure your remittance builds long-term growth.
@@ -221,8 +221,8 @@ export default function Home() {
                       <h2 className="text-2xl font-bold">Create Intent</h2>
                       <p className="text-gray-500 text-sm">Configure your purposeful transfer</p>
                     </div>
-                    <div className="p-3 bg-green-500/10 rounded-2xl">
-                      <Wallet className="text-green-400" />
+                    <div className="p-3 bg-celoyellow/10 rounded-2xl">
+                      <Wallet className="text-celoyellow" />
                     </div>
                   </div>
 
@@ -237,7 +237,7 @@ export default function Home() {
                             type="button"
                             onClick={() => setGoal(g)}
                             className={`p-4 rounded-xl border text-sm font-bold transition-all ${
-                              goal === g ? 'bg-green-500/20 border-green-500/50 text-green-400' : 'bg-white/5 border-white/5 text-gray-500 hover:border-white/20'
+                              goal === g ? 'bg-celoyellow/20 border-celoyellow/50 text-celoyellow' : 'bg-white/5 border-white/5 text-gray-500 hover:border-white/20'
                             }`}
                           >
                             {g}
@@ -304,7 +304,7 @@ export default function Home() {
                         <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest mt-2 px-1">
                           <div className="flex items-center gap-2">
                             <span className="text-gray-600">=</span>
-                            <span className="text-green-400">
+                            <span className="text-celoyellow">
                               {totalAmount ? parseEther(totalAmount).toString() : '0'}
                             </span>
                             <span className="text-gray-600">Raw Units (Wei)</span>
@@ -313,7 +313,7 @@ export default function Home() {
                             <button 
                               type="button"
                               onClick={() => setTotalAmount(balanceData.formatted)}
-                              className="text-green-500 hover:text-green-400 transition-colors"
+                              className="text-celoyellow hover:text-celogold transition-colors"
                             >
                               USE MAX
                             </button>
@@ -327,11 +327,11 @@ export default function Home() {
                       <div className="flex justify-between items-end">
                         <div>
                           <label className="text-[10px] font-black uppercase tracking-widest text-gray-500">Immediate vs. Locked Split</label>
-                          <div className="text-2xl font-black text-green-400 mt-1">{immediatePercentage}% / {100 - immediatePercentage}%</div>
+                          <div className="text-2xl font-black text-celoyellow mt-1">{immediatePercentage}% / {100 - immediatePercentage}%</div>
                         </div>
                         <div className="text-right">
                           <div className="text-[10px] font-black uppercase text-gray-500">Locked Amount</div>
-                          <div className="text-xl font-bold text-emerald-300">{Number((parseFloat(totalAmount || "0") - parseFloat(immediateAmount)).toFixed(8)).toString()}</div>
+                          <div className="text-xl font-bold text-celogold">{Number((parseFloat(totalAmount || "0") - parseFloat(immediateAmount)).toFixed(8)).toString()}</div>
                         </div>
                       </div>
                       <input 
@@ -340,25 +340,25 @@ export default function Home() {
                         max="100" 
                         value={immediatePercentage} 
                         onChange={(e) => setImmediatePercentage(parseInt(e.target.value))}
-                        className="w-full h-1.5 bg-white/10 rounded-full appearance-none cursor-pointer accent-green-500"
+                        className="w-full h-1.5 bg-white/10 rounded-full appearance-none cursor-pointer accent-celoyellow"
                       />
                         <span>Recipient Gets Now: {immediateAmount}</span>
                         <span>To Growth Vault: {Number((parseFloat(totalAmount || "0") - parseFloat(immediateAmount)).toFixed(8)).toString()}</span>
                       
                       {/* Growth Vault Visualization */}
-                      <div className="mt-4 p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-xl flex items-center justify-between">
+                      <div className="mt-4 p-4 bg-celogold/5 border border-celogold/10 rounded-xl flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <div className="p-2 bg-emerald-500/20 rounded-lg">
-                            <TrendingUp size={16} className="text-emerald-400" />
+                          <div className="p-2 bg-celogold/20 rounded-lg">
+                            <TrendingUp size={16} className="text-celogold" />
                           </div>
                           <div>
-                            <div className="text-[10px] font-black uppercase tracking-widest text-emerald-500/70">Yield Protocol (4.5% APY)</div>
-                            <div className="text-sm font-bold text-emerald-400">Simulated 1yr Growth</div>
+                            <div className="text-[10px] font-black uppercase tracking-widest text-celogold/70">Yield Protocol (4.5% APY)</div>
+                            <div className="text-sm font-bold text-celogold">Simulated 1yr Growth</div>
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="text-xl font-black text-emerald-300">~{simulatedGrowth}</div>
-                          <div className="text-[10px] uppercase text-emerald-500/50">Projected Return</div>
+                          <div className="text-xl font-black text-celogold">~{simulatedGrowth}</div>
+                          <div className="text-[10px] uppercase text-celogold/50">Projected Return</div>
                         </div>
                       </div>
                     </div>
@@ -414,7 +414,7 @@ export default function Home() {
                     <button
                       type="submit"
                       disabled={createTimestamp.isPending || !isConnected}
-                      className="w-full h-14 bg-gradient-to-r from-green-500 to-emerald-400 hover:scale-[1.02] active:scale-[0.98] transition-all rounded-2xl font-bold text-black flex items-center justify-center gap-3 disabled:opacity-50 disabled:grayscale"
+                      className="w-full h-14 bg-gradient-to-r from-celoyellow to-celogold hover:scale-[1.02] active:scale-[0.98] transition-all rounded-2xl font-bold text-black flex items-center justify-center gap-3 disabled:opacity-50 disabled:grayscale"
                     >
                       {createTimestamp.isPending ? <Loader2 className="animate-spin" /> : <ArrowRight size={20} />}
                       {isConnected ? "Confirm Intent" : "Connect Wallet to Start"}
@@ -438,8 +438,8 @@ export default function Home() {
                     </div>
                   ) : paymentIds.length === 0 ? (
                     <div className="bg-white/[0.03] border border-white/10 rounded-3xl p-20 text-center">
-                      <div className="w-20 h-20 bg-green-500/5 rounded-full flex items-center justify-center mx-auto mb-6 border border-green-500/10">
-                        <History size={32} className="text-green-500/50" />
+                      <div className="w-20 h-20 bg-celoyellow/5 rounded-full flex items-center justify-center mx-auto mb-6 border border-celoyellow/10">
+                        <History size={32} className="text-celoyellow/50" />
                       </div>
                       <h3 className="text-2xl font-bold mb-2">No Active Intents</h3>
                       <p className="text-gray-500 mb-8 text-lg">You haven't created any purposeful remittances yet.</p>
@@ -473,7 +473,7 @@ function TabButton({ active, onClick, icon, label, count }: any) {
       onClick={onClick}
       className={`w-full flex items-center justify-between px-6 py-4 rounded-2xl transition-all duration-300 ${
         active 
-          ? "bg-green-500/10 border border-green-500/30 text-green-400 shadow-[0_0_20px_rgba(34,197,94,0.1)]" 
+          ? "bg-celoyellow/10 border border-celoyellow/30 text-celoyellow shadow-[0_0_20px_rgba(252,255,82,0.1)]" 
           : "hover:bg-white/5 text-gray-500"
       }`}
     >
@@ -494,11 +494,11 @@ function ConditionCard({ selected, onClick, icon, title, desc }: any) {
       onClick={onClick}
       className={`cursor-pointer p-5 rounded-2xl border transition-all duration-300 ${
         selected 
-          ? "bg-green-500/10 border-green-500/50 shadow-lg shadow-green-500/5" 
+          ? "bg-celoyellow/10 border-celoyellow/50 shadow-lg shadow-celoyellow/5" 
           : "bg-white/[0.02] border-white/5 hover:border-white/20"
       }`}
     >
-      <div className={`mb-3 ${selected ? 'text-green-400' : 'text-gray-500'}`}>{icon}</div>
+      <div className={`mb-3 ${selected ? 'text-celoyellow' : 'text-gray-500'}`}>{icon}</div>
       <div className="font-bold text-sm mb-1">{title}</div>
       <div className="text-[10px] text-gray-500 uppercase tracking-tighter">{desc}</div>
     </div>
@@ -508,7 +508,7 @@ function ConditionCard({ selected, onClick, icon, title, desc }: any) {
 function FormInput({ label, value, onChange, placeholder, type = "text", icon }: any) {
   return (
     <div className="space-y-2 group">
-      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 ml-1 group-focus-within:text-green-400 transition-colors">
+      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 ml-1 group-focus-within:text-celoyellow transition-colors">
         {label}
       </label>
       <div className="relative">
@@ -517,7 +517,7 @@ function FormInput({ label, value, onChange, placeholder, type = "text", icon }:
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className="w-full bg-white/[0.03] border border-white/5 focus:border-green-500/50 focus:bg-white/[0.05] rounded-xl px-4 py-3 text-sm outline-none transition-all"
+          className="w-full bg-white/[0.03] border border-white/5 focus:border-celoyellow/50 focus:bg-white/[0.05] rounded-xl px-4 py-3 text-sm outline-none transition-all"
         />
         {icon && (
           <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
@@ -551,7 +551,7 @@ function PaymentItem({ paymentId }: { paymentId: bigint }) {
 
   const getStatusColor = () => {
     if (payment.refunded) return 'text-red-400 bg-red-400/10 border-red-400/20';
-    if (payment.immediateExecuted && payment.lockedExecuted) return 'text-green-400 bg-green-400/10 border-green-400/20';
+    if (payment.immediateExecuted && payment.lockedExecuted) return 'text-celoyellow bg-celoyellow/10 border-celoyellow/20';
     return 'text-blue-400 bg-blue-400/10 border-blue-400/20';
   };
 
@@ -662,7 +662,7 @@ function PaymentItem({ paymentId }: { paymentId: bigint }) {
                   <button 
                     onClick={() => executeLocked.execute(address as `0x${string}`)}
                     disabled={!payment.canExecute}
-                    className="flex-1 md:flex-none h-11 px-6 bg-green-500/10 hover:bg-green-500/20 border border-green-500/30 text-green-400 rounded-xl text-xs font-bold transition-all disabled:opacity-30 flex items-center justify-center gap-2"
+                    className="flex-1 md:flex-none h-11 px-6 bg-celoyellow/10 hover:bg-celoyellow/20 border border-celoyellow/30 text-celoyellow rounded-xl text-xs font-bold transition-all disabled:opacity-30 flex items-center justify-center gap-2"
                   >
                     {executeLocked.isPending ? <Loader2 size={14} className="animate-spin" /> : "Unlock Vault"}
                   </button>
@@ -695,7 +695,7 @@ function PaymentItem({ paymentId }: { paymentId: bigint }) {
             <span>{getTypeName()} Progress</span>
             <div className="text-right">
               {payment.executeAt && (
-                <div className="text-emerald-400 font-black tracking-widest">{timeLeft || 'Calculating...'}</div>
+                <div className="text-celogold font-black tracking-widest">{timeLeft || 'Calculating...'}</div>
               )}
               <div className="text-[8px]">Target: {payment.executeAt ? new Date(Number(payment.executeAt) * 1000).toLocaleDateString() : 'N/A'}</div>
             </div>
@@ -705,7 +705,7 @@ function PaymentItem({ paymentId }: { paymentId: bigint }) {
               initial={{ width: 0 }}
               animate={{ width: getProgressWidth() }}
               transition={{ duration: 1 }}
-              className={`h-full relative overflow-hidden ${payment.canExecute ? 'bg-green-500' : 'bg-emerald-500/40'}`}
+              className={`h-full relative overflow-hidden ${payment.canExecute ? 'bg-celoyellow' : 'bg-celogold/40'}`}
             >
               <div className="absolute inset-0 bg-white/20 w-1/2 -skew-x-12 animate-[shimmer_2s_infinite]" />
             </motion.div>
