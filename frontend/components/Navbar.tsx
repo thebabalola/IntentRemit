@@ -35,21 +35,18 @@ export default function Navbar() {
               className="w-full h-full object-contain"
             />
           </div>
-          <span className="text-xl font-black tracking-tight bg-gradient-to-r from-green-400 to-emerald-300 bg-clip-text text-transparent">
-            IntentRemit
-          </span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-8 text-[11px] font-black uppercase tracking-[0.2em] text-gray-500">
-          <Link href="#create" className="hover:text-green-400 transition-colors">Create</Link>
-          <Link href="#dashboard" className="hover:text-green-400 transition-colors">Dashboard</Link>
-          <a href="https://celoscan.io/address/0xf3850044Ee8d0498Cf07C5e820dd7Dd923fe869E" target="_blank" rel="noopener noreferrer" className="hover:text-green-400 transition-colors">Protocol</a>
+          <Link href="#create" className="hover:text-celoyellow transition-colors">Create</Link>
+          <Link href="#dashboard" className="hover:text-celoyellow transition-colors">Dashboard</Link>
+          <a href="https://celoscan.io/address/0xf3850044Ee8d0498Cf07C5e820dd7Dd923fe869E" target="_blank" rel="noopener noreferrer" className="hover:text-celoyellow transition-colors">Protocol</a>
         </nav>
 
         <div className="flex items-center gap-4">
           {!isMiniPay && <appkit-button />}
           {isMiniPay && isConnected && (
-            <div className="px-4 py-2 bg-green-500/10 border border-green-500/20 rounded-xl text-[10px] font-black uppercase text-green-400 tracking-widest">
+            <div className="px-4 py-2 bg-celoyellow/10 border border-celoyellow/20 rounded-xl text-[10px] font-black uppercase text-celoyellow tracking-widest">
               MiniPay Active
             </div>
           )}
