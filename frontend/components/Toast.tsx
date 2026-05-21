@@ -52,7 +52,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             key={toast.id}
             className={`px-5 py-3 rounded-xl text-sm font-bold shadow-lg backdrop-blur-xl border animate-[slideIn_0.3s_ease-out] ${
               toast.type === "success"
-                ? "bg-green-500/20 border-green-500/30 text-green-300"
+                ? "bg-celoyellow/20 border-celoyellow/30 text-celoyellow"
                 : toast.type === "error"
                 ? "bg-red-500/20 border-red-500/30 text-red-300"
                 : toast.type === "tx"
@@ -62,8 +62,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             style={
               toast.type === "tx"
                 ? {
-                    background: "rgba(143,168,40,0.12)",
-                    border: "1px solid rgba(143,168,40,0.25)",
+                    background: "rgba(252,255,82,0.12)",
+                    border: "1px solid rgba(252,255,82,0.25)",
                     color: "var(--primary)",
                   }
                 : undefined
@@ -72,7 +72,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             <span>{toast.message}</span>
             {toast.type === "tx" && toast.txHash && (
               <a
-                href={`https://basescan.org/tx/${toast.txHash}`}
+                href={`https://celoscan.io/tx/${toast.txHash}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-1 mt-1 text-xs font-semibold underline underline-offset-2"
