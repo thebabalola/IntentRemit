@@ -189,7 +189,7 @@ export default function Home() {
         <div id="main-container" className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Navigation Sidebar */}
-          <div className="lg:col-span-3 space-y-2">
+          <div className="grid grid-cols-2 lg:flex lg:flex-col lg:col-span-3 gap-2 lg:space-y-2">
             <TabButton 
               active={activeTab === 'create'} 
               onClick={() => setActiveTab('create')}
@@ -365,7 +365,7 @@ export default function Home() {
 
                     <div className="space-y-4">
                       <label className="text-xs font-black uppercase tracking-widest text-gray-500 ml-1">Lock Conditions</label>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-2 gap-3">
                         <ConditionCard 
                           selected={conditionType === ConditionType.TIMESTAMP}
                           onClick={() => setConditionType(ConditionType.TIMESTAMP)}
