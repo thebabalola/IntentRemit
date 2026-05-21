@@ -14,10 +14,10 @@ export default function HeroIllustration() {
       {/* Background grid faint lines */}
       <svg className="absolute inset-0 w-full h-full opacity-[0.06]" viewBox="0 0 400 420">
         {Array.from({ length: 9 }).map((_, i) => (
-          <line key={`v${i}`} x1={i * 50} y1="0" x2={i * 50} y2="420" stroke="#8FA828" strokeWidth="1"/>
+          <line key={`v${i}`} x1={i * 50} y1="0" x2={i * 50} y2="420" stroke="#FCFF52" strokeWidth="1"/>
         ))}
         {Array.from({ length: 9 }).map((_, i) => (
-          <line key={`h${i}`} x1="0" y1={i * 52} x2="400" y2={i * 52} stroke="#8FA828" strokeWidth="1"/>
+          <line key={`h${i}`} x1="0" y1={i * 52} x2="400" y2={i * 52} stroke="#FCFF52" strokeWidth="1"/>
         ))}
       </svg>
 
@@ -28,7 +28,7 @@ export default function HeroIllustration() {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
       >
-        <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#8FA828" strokeWidth="2">
+        <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#FCFF52" strokeWidth="2">
           <rect x="3" y="11" width="18" height="11" rx="2" />
           <circle cx="12" cy="5" r="2" />
           <path d="M12 7v4" />
