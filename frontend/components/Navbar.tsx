@@ -5,11 +5,13 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useConnect, useAccount } from "wagmi";
 import { injected } from "wagmi/connectors";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 export default function Navbar() {
   const { connect } = useConnect();
   const { isConnected } = useAccount();
   const [isMiniPay, setIsMiniPay] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && (window as any).ethereum?.isMiniPay) {
@@ -31,7 +33,7 @@ export default function Navbar() {
           <div className="w-14 h-14 flex items-center justify-center">
             <img 
               src="/logo.png" 
-              alt="IntentRemit Logo" 
+              alt="" 
               className="w-full h-full object-contain"
             />
           </div>
@@ -42,6 +44,23 @@ export default function Navbar() {
           <Link href="#dashboard" className="hover:text-celoyellow transition-colors">Dashboard</Link>
           <a href="https://celoscan.io/address/0xf3850044Ee8d0498Cf07C5e820dd7Dd923fe869E" target="_blank" rel="noopener noreferrer" className="hover:text-celoyellow transition-colors">Protocol</a>
         </nav>
+
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="md:hidden flex items-center text-gray-500"
+        >
+          {menuOpen ? <XMarkIcon className="h-6 w-6" /> : <Bars3Icon className="h-6 w-6" />}
+        </button>
+
+        {menuOpen && (
+          <div className="absolute top-full left-0 w-full bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-b-2xl md:hidden">
+            <nav className="flex flex-col gap-4 p-4 text-center text-gray-500">
+              <Link href="#create" onClick={() => setMenuOpen(false)} className="hover:text-celoyellow transition-colors">Create</Link>
+              <Link href="#dashboard" onClick={() => setMenuOpen(false)} className="hover:text-celoyellow transition-colors">Dashboard</Link>
+              <a href="https://celoscan.io/address/0xf3850044Ee8d0498Cf07C5e820dd7Dd923fe869E" target="_blank" rel="noopener noreferrer" className="hover:text-celoyellow transition-colors">Protocol</a>
+            </nav>
+          </div>
+        )}
 
         <div className="flex items-center gap-4">
           {!isMiniPay && <appkit-button />}
