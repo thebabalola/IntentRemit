@@ -9,6 +9,9 @@
   --radius-xl: 1rem;
   --radius-2xl: 1.5rem;
   --radius-3xl: 2rem;
+
+  --color-celoyellow: #FCFF52;
+  --color-celogold: #FBCC5C;
 }
 
 @layer base {
@@ -28,7 +31,7 @@
   }
   
   .text-gradient {
-    @apply bg-gradient-to-r from-green-400 to-emerald-300 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-celoyellow to-celogold bg-clip-text text-transparent;
   }
 }
 
