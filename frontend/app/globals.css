@@ -19,6 +19,10 @@
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
+  appkit-button {
+    --w3m-accent: #22c55e !important;
+    --w3m-color-bg-1: #22c55e !important;
+  }
 }
 
 @layer utilities {

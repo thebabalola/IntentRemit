@@ -32,7 +32,7 @@ export default function Navbar() {
         <Link href="/" className="flex items-center gap-3">
           <div className="w-14 h-14 flex items-center justify-center">
             <img 
-              src="/logo.png" 
+              src="/intentremit-logo.svg" 
               alt="" 
               className="w-full h-full object-contain"
             />
