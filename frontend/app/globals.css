@@ -9,12 +9,19 @@
   --radius-xl: 1rem;
   --radius-2xl: 1.5rem;
   --radius-3xl: 2rem;
+
+  --color-celoyellow: #FCFF52;
+  --color-celogold: #FBCC5C;
 }
 
 @layer base {
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+  appkit-button {
+    --w3m-accent: #22c55e !important;
+    --w3m-color-bg-1: #22c55e !important;
   }
 }
 
@@ -28,7 +35,7 @@
   }
   
   .text-gradient {
-    @apply bg-gradient-to-r from-green-400 to-emerald-300 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-celoyellow to-celogold bg-clip-text text-transparent;
   }
 }
 
