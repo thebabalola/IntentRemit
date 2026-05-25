@@ -92,13 +92,13 @@ export default function OnboardingTour() {
     <AnimatePresence>
       {isOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
-          {/* Backdrop */}
+          {/* Backdrop: Lighter and less blurry to keep the landing page visible */}
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={closeTour}
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"
           />
 
           {/* Modal Container */}
