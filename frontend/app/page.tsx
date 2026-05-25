@@ -941,7 +941,7 @@ function PaymentItem({ paymentId }: { paymentId: bigint }) {
           <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden shadow-inner">
             <motion.div
               initial={{ width: 0 }}
-              animate={{ width: getProgressWidth() }}
+              animate={{ width: getProgressWidthValue() }}
               transition={{ duration: 1 }}
               className={`h-full relative overflow-hidden ${payment.canExecute ? "bg-celoyellow" : "bg-celogold/40"}`}
             >
