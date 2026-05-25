@@ -2,33 +2,59 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { XMarkIcon, ChevronRightIcon, ChevronLeftIcon } from "@heroicons/react/24/outline";
+import { 
+  X, 
+  ChevronRight, 
+  ChevronLeft, 
+  Sparkles, 
+  Target, 
+  Split, 
+  Lock, 
+  CheckCircle2,
+  Rocket
+} from "lucide-react";
 
-const steps = [
+interface Step {
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+  highlightId?: string;
+}
+
+const steps: Step[] = [
   {
     title: "Welcome to IntentRemit",
-    description: "Send programmable remittances on Celo. Attach rules and conditions to the money you send, ensuring it's used exactly as intended.",
-    icon: "👋",
+    description: "The world's first programmable remittance protocol on Celo. Let's show you how to send money with purpose.",
+    icon: <Rocket className="text-celoyellow w-8 h-8" />,
   },
   {
-    title: "Set Your Goal & AI Split",
-    description: "Select the purpose of your transfer (e.g., School Fees). Our AI will suggest the perfect split between immediate cash and locked funds for long-term growth.",
-    icon: "🎯",
+    title: "Define Your Goal",
+    description: "Start by selecting what the money is for. Whether it's School Fees or Business, purpose defines the intent.",
+    icon: <Target className="text-celoyellow w-8 h-8" />,
+    highlightId: "goal-selection",
   },
   {
-    title: "Immediate vs Locked",
-    description: "Use the slider to customize how much the recipient can spend right now versus how much is securely held in our high-yield Growth Vault.",
-    icon: "⚖️",
+    title: "AI Smart Split",
+    description: "Our AI suggests the best split between immediate cash and long-term growth. Just click 'Apply Split' to use it.",
+    icon: <Sparkles className="text-celoyellow w-8 h-8" />,
+    highlightId: "ai-suggestion",
   },
   {
-    title: "Enforce Conditions",
-    description: "Want to release funds on a specific date? Or require multiple approvals before unlock? Set your custom lock conditions with ease.",
-    icon: "🔒",
+    title: "Programmable Split",
+    description: "Use the slider to decide how much goes to the recipient now, and how much is locked for their future.",
+    icon: <Split className="text-celoyellow w-8 h-8" />,
+    highlightId: "split-slider",
   },
   {
-    title: "Track Everything",
-    description: "Monitor the progress of your transfers, check unlock countdowns, and claim funds directly from your personalized Dashboard.",
-    icon: "📊",
+    title: "The Growth Vault",
+    description: "Locked funds earn yield automatically. You're not just sending money; you're building a future.",
+    icon: <Lock className="text-celoyellow w-8 h-8" />,
+    highlightId: "growth-vault",
+  },
+  {
+    title: "You're Ready!",
+    description: "Connect your wallet and create your first purposeful remittance intent today.",
+    icon: <CheckCircle2 className="text-celoyellow w-8 h-8" />,
   }
 ];
 
@@ -37,25 +63,22 @@ export default function OnboardingTour() {
   const [currentStep, setCurrentStep] = useState(0);
 
   useEffect(() => {
-    // Check if user has seen the tour
-    const hasSeenTour = localStorage.getItem("intentremit_tour_seen");
+    const hasSeenTour = localStorage.getItem("hasSeenIntentRemitTour");
     if (!hasSeenTour) {
-      // Small delay so it doesn't jarringly appear before page render
-      const timer = setTimeout(() => setIsOpen(true), 800);
-      return () => clearTimeout(timer);
+      setIsOpen(true);
     }
   }, []);
 
-  const handleClose = () => {
+  const closeTour = () => {
+    localStorage.setItem("hasSeenIntentRemitTour", "true");
     setIsOpen(false);
-    localStorage.setItem("intentremit_tour_seen", "true");
   };
 
   const nextStep = () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      handleClose();
+      closeTour();
     }
   };
 
@@ -65,104 +88,97 @@ export default function OnboardingTour() {
     }
   };
 
-  if (!isOpen) return null;
-
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        {/* Backdrop */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-          onClick={handleClose}
-        />
+      {isOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+          {/* Backdrop */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={closeTour}
+            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+          />
 
-        {/* Modal */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="relative w-full max-w-md overflow-hidden rounded-2xl bg-[#0a0a0a] border border-white/10 shadow-2xl z-10"
-        >
-          {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-white/5">
-            <span className="text-xs font-semibold uppercase tracking-wider text-white/50">
-              Product Tour ({currentStep + 1} of {steps.length})
-            </span>
-            <button
-              onClick={handleClose}
-              className="p-1 rounded-full hover:bg-white/10 text-white/50 transition-colors"
+          {/* Modal Container */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            className="relative w-full max-w-md bg-[#0b0a05] border border-celoyellow/20 rounded-[32px] overflow-hidden shadow-[0_0_50px_rgba(252,255,82,0.1)]"
+          >
+            {/* Progress Bar */}
+            <div className="absolute top-0 left-0 right-0 h-1 bg-white/5">
+              <motion.div 
+                initial={{ width: 0 }}
+                animate={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
+                className="h-full bg-celoyellow"
+              />
+            </div>
+
+            <button 
+              onClick={closeTour}
+              className="absolute top-6 right-6 p-2 text-gray-500 hover:text-white transition-colors"
             >
-              <XMarkIcon className="w-5 h-5" />
+              <X size={20} />
             </button>
-          </div>
 
-          {/* Content */}
-          <div className="p-8">
-            <div className="flex justify-center mb-6 text-6xl">
-              <motion.div
+            <div className="p-10 pt-14 text-center">
+              <motion.div 
                 key={currentStep}
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ type: "spring", bounce: 0.5 }}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                className="space-y-6"
               >
-                {steps[currentStep].icon}
+                <div className="w-20 h-20 bg-celoyellow/10 rounded-3xl flex items-center justify-center mx-auto mb-8 border border-celoyellow/20">
+                  {steps[currentStep].icon}
+                </div>
+                
+                <h3 className="text-3xl font-black text-white tracking-tight">
+                  {steps[currentStep].title}
+                </h3>
+                
+                <p className="text-gray-400 text-lg leading-relaxed font-medium">
+                  {steps[currentStep].description}
+                </p>
               </motion.div>
+
+              <div className="mt-12 flex items-center justify-between">
+                <div className="flex gap-1.5">
+                  {steps.map((_, i) => (
+                    <div 
+                      key={i}
+                      className={`h-1.5 rounded-full transition-all duration-300 ${
+                        i === currentStep ? "w-6 bg-celoyellow" : "w-1.5 bg-white/10"
+                      }`}
+                    />
+                  ))}
+                </div>
+
+                <div className="flex gap-3">
+                  {currentStep > 0 && (
+                    <button 
+                      onClick={prevStep}
+                      className="p-3 bg-white/5 hover:bg-white/10 text-white rounded-2xl transition-all"
+                    >
+                      <ChevronLeft size={24} />
+                    </button>
+                  )}
+                  <button 
+                    onClick={nextStep}
+                    className="px-6 py-3 bg-celoyellow text-black font-black rounded-2xl hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
+                  >
+                    {currentStep === steps.length - 1 ? "Get Started" : "Next"}
+                    <ChevronRight size={20} />
+                  </button>
+                </div>
+              </div>
             </div>
-
-            <motion.div
-              key={`text-${currentStep}`}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="text-center h-32"
-            >
-              <h2 className="text-2xl font-bold mb-3 text-white">
-                {steps[currentStep].title}
-              </h2>
-              <p className="text-white/60 leading-relaxed text-sm">
-                {steps[currentStep].description}
-              </p>
-            </motion.div>
-          </div>
-
-          {/* Footer Navigation */}
-          <div className="flex items-center justify-between p-4 bg-white/[0.02] border-t border-white/5">
-            <button
-              onClick={prevStep}
-              disabled={currentStep === 0}
-              className={`p-2 rounded-lg flex items-center transition-colors ${
-                currentStep === 0 
-                  ? 'text-white/20 cursor-not-allowed' 
-                  : 'text-white/80 hover:bg-white/10'
-              }`}
-            >
-              <ChevronLeftIcon className="w-5 h-5" />
-            </button>
-
-            {/* Progress Dots */}
-            <div className="flex gap-2">
-              {steps.map((_, idx) => (
-                <div
-                  key={idx}
-                  className={`h-2 rounded-full transition-all duration-300 ${
-                    idx === currentStep ? 'bg-[#22c55e] w-4' : 'bg-white/20 w-2'
-                  }`}
-                />
-              ))}
-            </div>
-
-            <button
-              onClick={nextStep}
-              className="px-4 py-2 bg-[#22c55e] hover:bg-[#1ea950] text-black font-semibold rounded-lg flex items-center gap-1 transition-colors"
-            >
-              {currentStep === steps.length - 1 ? 'Get Started' : 'Next'}
-              {currentStep < steps.length - 1 && <ChevronRightIcon className="w-4 h-4" />}
-            </button>
-          </div>
-        </motion.div>
-      </div>
+          </motion.div>
+        </div>
+      )}
     </AnimatePresence>
   );
 }
