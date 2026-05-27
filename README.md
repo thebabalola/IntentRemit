@@ -97,9 +97,20 @@ IntentRemit introduces **programmable financial intent** into remittances:
 
 ### 🔗 Blockchain Layer
 
-- **Solidity Smart Contracts**
-  - Time-lock / vesting logic
-  - Conditional release rules
+- **Solidity Smart Contracts**: Custom escrow and time-lock logic.
+- **Yield Adapters**: Modular interface for DeFi yield integration.
+- **Oracle Interface**: Pluggable condition checking.
+
+### 💻 Frontend Layer
+
+- **Next.js 16**: Modern, fast web framework.
+- **Wagmi/Viem**: Robust Ethereum interactions.
+- **Tailwind CSS**: Utility-first styling.
+
+---
+
+## 🛠 Setup & Installation
+
 - **Celo Network**
   - Fast, low-cost payments
   - cUSD/CELO transfers
@@ -109,6 +120,7 @@ IntentRemit introduces **programmable financial intent** into remittances:
 ## 🚀 Deployment Status
 
 ### Celo Mainnet
+
 - **PaymentFactory**: [`0xf3850044Ee8d0498Cf07C5e820dd7Dd923fe869E`](https://celoscan.io/address/0xf3850044Ee8d0498Cf07C5e820dd7Dd923fe869E)
 - **ConditionOracle**: [`0x81BCf3F9aBB2fAa06732Cd3A7190490C9708f0C6`](https://celoscan.io/address/0x81BCf3F9aBB2fAa06732Cd3A7190490C9708f0C6)
 
@@ -203,11 +215,13 @@ IntentRemit/
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Node.js v18+
 - Hardhat / Foundry (for Solidity)
 - MiniPay / Valora / MetaMask
 
 ### Setup Frontend
+
 ```bash
 cd frontend
 npm install
@@ -215,6 +229,7 @@ npm run dev
 ```
 
 ### Setup Smart Contracts
+
 ```bash
 cd smartcontract
 npm install
@@ -230,6 +245,7 @@ npx hardhat compile
 - 🤖 **[Backend & AI Issues](./docs/ISSUES-BACKEND-AI.md)**
 
 Guides:
+
 - 📘 **[Smart Contract Guide](./docs/SMARTCONTRACT_GUIDE.md)**
 - 🌐 **[Frontend Integration Guide](./docs/FRONTEND_GUIDE.md)**
 
@@ -241,5 +257,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 
-*Project maintained by @bbkenny.* 
-  
+_Project maintained by @bbkenny._
