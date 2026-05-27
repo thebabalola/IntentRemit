@@ -35,6 +35,7 @@ import {
 import { ConditionType } from "@/lib/constants";
 
 export default function Home() {
+  // Main entry point for IntentRemit - Diaspora-focused programmable remittances
   const { address, isConnected } = useAccount();
   const [activeTab, setActiveTab] = useState<"create" | "status">("create");
   const [status, setStatus] = useState<{
