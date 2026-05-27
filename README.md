@@ -80,14 +80,16 @@ IntentRemit introduces **programmable financial intent** into remittances:
 
 ### 5. 📈 Growth Vault
 
-- Locked funds go into a **Solidity time-lock contract**
-- Displays:
-  - Locked amount
-  - Unlock date
-  - Simulated growth
+- **Growth Vault**: Locked funds go into a **Solidity time-lock contract**
+- **Mainnet Ready**: Deployed to Celo Mainnet.
 
-> ⚠️ MVP Note: Yield is simulated  
-> Production path: Celo liquidity pools / tokenized assets
+---
+
+## 🚀 Project Status
+
+- **Smart Contracts**: ✅ Deployed & Verified on Celo Mainnet
+- **Frontend**: 🚧 In Progress (Core features integrated)
+- **AI Allocation**: ✅ Functional rule-based engine
 
 ---
 
