@@ -5,11 +5,11 @@
 
 ---
 
-## 🚀 Deployment (Blocked — Must Do First)
+## 🚀 Deployment (Completed ✅)
 
-- [ ] **Fix frontend `npm run build`** — currently crashes with a `Bus error (core dumped)` caused by corrupted SWC compiler binaries from the aborted `npm install`. Fix: `rm -rf node_modules .next && npm install` (let it finish fully).
-- [x] **Deploy `PaymentFactory` + `ConditionOracle` to Celo Mainnet** — run `npx hardhat run scripts/deploy.ts --network celo` and capture deployed addresses.
-- [x] **Update `frontend/lib/contracts.ts` with real deployed addresses** — currently the contract address fields point to placeholder/zero addresses.
+- [x] **Fix frontend `npm run build`** — Cleaned up corrupted SWC compiler binaries.
+- [x] **Deploy `PaymentFactory` + `ConditionOracle` to Celo Mainnet** — Deployed and verified.
+- [x] **Update `frontend/lib/contracts.ts` and `constants.ts` with real deployed addresses** — All addresses updated.
 
 ---
 
