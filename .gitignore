@@ -15,6 +15,13 @@ ehthumbs.db
 *.log
 logs/
 
+# Dependencies
+node_modules/
+.next/
+dist/
+build/
+out/
+
 # Temporary / generated docs
 doc-sync-report.md
 audit-report.md
