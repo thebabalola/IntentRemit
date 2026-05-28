@@ -5,7 +5,7 @@ import ClientLayout from "@/components/ClientLayout";
 import Navbar from "@/components/Navbar";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://intentremit.vercel.app"),
+  metadataBase: new URL("https://intent-remit.vercel.app"),
   title: {
     template: "%s | IntentRemit",
     default: "IntentRemit — Programmable Purposeful Remittance",

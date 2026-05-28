@@ -10,7 +10,7 @@ const projectId = process.env.NEXT_PUBLIC_REOWN_PROJECT_ID || "";
 const metadata = {
   name: "IntentRemit",
   description: "IntentRemit — Intent-based remittance protocol",
-  url: "https://intentremit.vercel.app",
+  url: "https://intent-remit.vercel.app",
   icons: ["https://avatars.githubusercontent.com/u/37784886"],
 };
 

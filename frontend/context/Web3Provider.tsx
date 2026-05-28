@@ -14,7 +14,7 @@ const projectId = process.env.NEXT_PUBLIC_REOWN_PROJECT_ID || 'placeholder-build
 const metadata = {
   name: 'IntentRemit',
   description: 'Intent-based remittance protocol for purposeful transfers on Celo',
-  url: 'https://intentremit.vercel.app',
+  url: 'https://intent-remit.vercel.app',
   icons: ['/favicon.ico'],
 }
 
