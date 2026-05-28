@@ -262,6 +262,37 @@ export default function Home() {
               label="My Dashboard"
               count={paymentIds.length}
             />
+            {isConnected && address && (
+              <div className="col-span-2 mt-2 lg:mt-6 p-4 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-xl flex flex-col gap-2 shadow-xl">
+                <div className="flex items-center justify-between text-[10px] font-black uppercase text-gray-500 tracking-wider">
+                  <span>Connected Wallet</span>
+                  <span className="text-celoyellow font-black uppercase tracking-widest text-[9px] bg-celoyellow/10 px-2 py-0.5 rounded-md border border-celoyellow/20">
+                    Active
+                  </span>
+                </div>
+                <div className="flex items-center justify-between gap-3 bg-black/40 px-3 py-2.5 rounded-xl border border-white/5 relative overflow-hidden">
+                  <span className="font-mono text-xs text-gray-300 truncate pr-2 select-all">
+                    {address}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard.writeText(address);
+                      setCopied(true);
+                      setTimeout(() => setCopied(false), 2000);
+                    }}
+                    className="p-1.5 hover:bg-white/5 text-gray-400 hover:text-white rounded-lg transition-all active:scale-95 shrink-0"
+                    title="Copy Address"
+                  >
+                    {copied ? (
+                      <Check size={14} className="text-celoyellow" />
+                    ) : (
+                      <Copy size={14} />
+                    )}
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Main Content Area */}
