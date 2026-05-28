@@ -3,7 +3,7 @@
 import React, { ReactNode } from 'react'
 import { createAppKit } from '@reown/appkit/react'
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi'
-import { celo } from '@reown/appkit/networks'
+import { celo, celoSepolia } from '@reown/appkit/networks'
 import { WagmiProvider } from 'wagmi'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
@@ -19,14 +19,14 @@ const metadata = {
 }
 
 const wagmiAdapter = new WagmiAdapter({
-  networks: [celo],
+  networks: [celo, celoSepolia],
   projectId,
   ssr: true,
 })
 
 createAppKit({
   adapters: [wagmiAdapter],
-  networks: [celo],
+  networks: [celo, celoSepolia],
   defaultNetwork: celo,
   projectId,
   metadata,
