@@ -304,7 +304,7 @@ export default function Home() {
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
-                  className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl"
+                  className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-3xl p-5 md:p-8 shadow-2xl"
                 >
                   <div className="flex items-center justify-between mb-8">
                     <div>
@@ -324,7 +324,25 @@ export default function Home() {
                       <label className="text-xs font-black uppercase tracking-widest text-gray-500 ml-1">
                         Select Remittance Goal
                       </label>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                      
+                      {/* Mobile Select Dropdown */}
+                      <div className="md:hidden">
+                        <select
+                          value={goal}
+                          onChange={(e) => setGoal(e.target.value)}
+                          className="w-full bg-[#14130d] border border-white/10 rounded-xl px-4 py-3.5 text-sm font-bold outline-none text-white focus:border-celoyellow/50 transition-all"
+                        >
+                          <option value="" disabled>Select Goal...</option>
+                          {["School Fees", "Medical", "Rent", "Business"].map((g) => (
+                            <option key={g} value={g} className="bg-[#14130d] text-white">
+                              {g}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      {/* Desktop Grid Selector */}
+                      <div className="hidden md:grid grid-cols-4 gap-3">
                         {["School Fees", "Medical", "Rent", "Business"].map(
                           (g) => (
                             <button
@@ -365,6 +383,8 @@ export default function Home() {
                         </motion.div>
                       )}
                     </div>
+
+                    <div className="border-b border-white/5 my-6" />
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <FormInput
@@ -442,10 +462,12 @@ export default function Home() {
                       </div>
                     </div>
 
+                    <div className="border-b border-white/5 my-6" />
+
                     {/* Split Slider */}
                     <div
                       id="split-slider"
-                      className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl space-y-6"
+                      className="p-4 sm:p-6 bg-white/[0.02] border border-white/5 rounded-2xl space-y-6"
                     >
                       <div className="flex justify-between items-end">
                         <div>
@@ -467,7 +489,8 @@ export default function Home() {
                                 parseFloat(totalAmount || "0") -
                                 parseFloat(immediateAmount)
                               ).toFixed(8),
-                            ).toString()}
+                            ).toString()}{" "}
+                            {balanceData?.symbol || ""}
                           </div>
                         </div>
                       </div>
@@ -481,16 +504,24 @@ export default function Home() {
                         }
                         className="w-full h-1.5 bg-white/10 rounded-full appearance-none cursor-pointer accent-celoyellow"
                       />
-                      <span>Recipient Gets Now: {immediateAmount}</span>
-                      <span>
-                        To Growth Vault:{" "}
-                        {Number(
-                          (
-                            parseFloat(totalAmount || "0") -
-                            parseFloat(immediateAmount)
-                          ).toFixed(8),
-                        ).toString()}
-                      </span>
+                      
+                      <div className="flex flex-col sm:flex-row justify-between gap-2 text-xs font-semibold text-gray-400 px-1 pt-1">
+                        <span>
+                          Recipient Gets Now: <strong className="text-white">{immediateAmount} {balanceData?.symbol || ""}</strong>
+                        </span>
+                        <span>
+                          To Growth Vault:{" "}
+                          <strong className="text-white">
+                            {Number(
+                              (
+                                parseFloat(totalAmount || "0") -
+                                parseFloat(immediateAmount)
+                              ).toFixed(8),
+                            ).toString()}{" "}
+                            {balanceData?.symbol || ""}
+                          </strong>
+                        </span>
+                      </div>
 
                       {/* Growth Vault Visualization */}
                       <div
@@ -520,6 +551,8 @@ export default function Home() {
                         </div>
                       </div>
                     </div>
+
+                    <div className="border-b border-white/5 my-6" />
 
                     <div className="space-y-4">
                       <label className="text-xs font-black uppercase tracking-widest text-gray-500 ml-1">
@@ -572,6 +605,8 @@ export default function Home() {
                         </div>
                       )}
                     </div>
+
+                    <div className="border-b border-white/5 my-6" />
 
                     <button
                       type="submit"
