@@ -266,16 +266,11 @@ export default function Home() {
               count={paymentIds.length}
             />
             {isConnected && address && (
-              <div className="col-span-2 mt-2 lg:mt-6 p-4 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-xl flex flex-col gap-2 shadow-xl">
-                <div className="flex items-center justify-between text-[10px] font-black uppercase text-gray-500 tracking-wider">
-                  <span>Connected Wallet</span>
-                  <span className="text-celoyellow font-black uppercase tracking-widest text-[9px] bg-celoyellow/10 px-2 py-0.5 rounded-md border border-celoyellow/20">
-                    Active
-                  </span>
-                </div>
-                <div className="flex items-center justify-between gap-3 bg-black/40 px-3 py-2.5 rounded-xl border border-white/5 relative overflow-hidden">
-                  <span className="font-mono text-xs text-gray-300 truncate pr-2 select-all">
-                    {address}
+              <div className="col-span-2 mt-2 lg:mt-4 px-2 py-1 flex items-center justify-between text-xs font-bold">
+                <span className="text-gray-500 uppercase tracking-widest text-[9px] font-black">Connected Wallet</span>
+                <div className="flex items-center gap-1.5 text-celoyellow">
+                  <span className="font-mono tracking-wider">
+                    {address.slice(0, 6)}...{address.slice(-4)}
                   </span>
                   <button
                     type="button"
@@ -284,13 +279,13 @@ export default function Home() {
                       setCopied(true);
                       setTimeout(() => setCopied(false), 2000);
                     }}
-                    className="p-1.5 hover:bg-white/5 text-gray-400 hover:text-white rounded-lg transition-all active:scale-95 shrink-0"
+                    className="p-1 hover:bg-white/5 rounded transition-all active:scale-95 flex items-center justify-center shrink-0"
                     title="Copy Address"
                   >
                     {copied ? (
-                      <Check size={14} className="text-celoyellow" />
+                      <Check size={12} className="text-celoyellow" />
                     ) : (
-                      <Copy size={14} />
+                      <Copy size={12} />
                     )}
                   </button>
                 </div>
