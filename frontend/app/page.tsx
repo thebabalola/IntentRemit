@@ -20,6 +20,8 @@ import {
   ExternalLink,
   Sparkles,
   TrendingUp,
+  Copy,
+  Check,
 } from "lucide-react";
 import {
   useUserPayments,
@@ -38,6 +40,7 @@ export default function Home() {
   // Main entry point for IntentRemit - Diaspora-focused programmable remittances
   const { address, isConnected } = useAccount();
   const [activeTab, setActiveTab] = useState<"create" | "status">("create");
+  const [copied, setCopied] = useState(false);
   const [status, setStatus] = useState<{
     type: "success" | "error";
     message: string;
