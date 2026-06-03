@@ -52,7 +52,8 @@ contract ConditionalPayment is ReentrancyGuard {
     address public yieldPool;
     bool public isYieldBearing;
 
-    uint256 public constant REFUND_TIMEOUT = 30 days;
+    // Configurable refund timeout — set by factory at deploy time (default 30 days)
+    uint256 public refundTimeout;
 
     event PaymentExecuted(address indexed paymentAddress, address recipient, uint256 amount, bool isImmediate);
     event PaymentRefunded(address indexed paymentAddress, address sender, uint256 amount);
@@ -66,7 +67,8 @@ contract ConditionalPayment is ReentrancyGuard {
         uint256 _immediateAmount,
         string memory _goal,
         uint8 _conditionType,
-        bytes memory _conditionData
+        bytes memory _conditionData,
+        uint256 _refundTimeout
     ) payable {
         require(_sender != address(0), "Invalid sender");
         require(_recipient != address(0), "Invalid recipient");
@@ -88,6 +90,7 @@ contract ConditionalPayment is ReentrancyGuard {
         goal = _goal;
         createdAt = block.timestamp;
         conditionType = ConditionType(_conditionType);
+        refundTimeout = _refundTimeout > 0 ? _refundTimeout : 30 days;
 
         _decodeConditionData(_conditionData);
     }
@@ -194,7 +197,7 @@ contract ConditionalPayment is ReentrancyGuard {
     }
 
     function _isExpired() internal view returns (bool) {
-        return block.timestamp > createdAt + REFUND_TIMEOUT;
+        return block.timestamp > createdAt + refundTimeout;
     }
 
     function _transfer(address _to, uint256 _amount) internal {
