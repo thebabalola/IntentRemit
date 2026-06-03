@@ -8,6 +8,9 @@ import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol
 contract PaymentFactory {
     using SafeERC20 for IERC20;
 
+    address public owner;
+    uint256 public defaultRefundTimeout = 30 days; // Governable by owner
+
     uint256 public totalPayments;
     mapping(uint256 => address) public payments;
     mapping(address => uint256[]) public userPayments;
@@ -30,6 +33,27 @@ contract PaymentFactory {
         string goal,
         ConditionType conditionType
     );
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not owner");
+        _;
+    }
+
+    /// @notice Governance: update the default refund timeout for new payment contracts
+    function setDefaultRefundTimeout(uint256 _timeout) external onlyOwner {
+        require(_timeout >= 1 days, "Min 1 day timeout");
+        defaultRefundTimeout = _timeout;
+    }
+
+    /// @notice Governance: transfer factory ownership
+    function transferOwnership(address _newOwner) external onlyOwner {
+        require(_newOwner != address(0), "Zero address");
+        owner = _newOwner;
+    }
 
     function createPayment(
         address recipient,
@@ -65,7 +89,8 @@ contract PaymentFactory {
             immediateAmount,
             goal,
             uint8(conditionType),
-            conditionData
+            conditionData,
+            defaultRefundTimeout
         );
 
         // If ERC20, transfer the tokens from factory to the new payment contract
