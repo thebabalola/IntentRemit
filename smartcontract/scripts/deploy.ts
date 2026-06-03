@@ -1,4 +1,6 @@
-import { ethers } from "hardhat";
+import { ethers, network } from "hardhat";
+import fs from "fs";
+import path from "path";
 
 async function main() {
   const [deployer] = await ethers.getSigners();
@@ -11,6 +13,7 @@ async function main() {
   const paymentFactory = await PaymentFactory.deploy();
   await paymentFactory.waitForDeployment();
   const factoryAddress = await paymentFactory.getAddress();
+  const factoryTx = paymentFactory.deploymentTransaction()?.hash ?? "";
   console.log("PaymentFactory deployed to:", factoryAddress);
 
   // Deploy ConditionOracle
@@ -19,7 +22,36 @@ async function main() {
   const oracle = await ConditionOracle.deploy();
   await oracle.waitForDeployment();
   const oracleAddress = await oracle.getAddress();
+  const oracleTx = oracle.deploymentTransaction()?.hash ?? "";
   console.log("ConditionOracle deployed to:", oracleAddress);
+
+  // Save deployment record
+  const deploymentData = {
+    network: network.name,
+    chainId: (await ethers.provider.getNetwork()).chainId.toString(),
+    deployer: deployerAddress,
+    timestamp: new Date().toISOString(),
+    contracts: {
+      PaymentFactory: {
+        address: factoryAddress,
+        transactionHash: factoryTx,
+      },
+      ConditionOracle: {
+        address: oracleAddress,
+        transactionHash: oracleTx,
+      },
+    },
+  };
+
+  const deploymentsDir = path.join(__dirname, "../deployments");
+  if (!fs.existsSync(deploymentsDir)) {
+    fs.mkdirSync(deploymentsDir, { recursive: true });
+  }
+  fs.writeFileSync(
+    path.join(deploymentsDir, "deployment.json"),
+    JSON.stringify(deploymentData, null, 2)
+  );
+  console.log("\n✅ Deployment record saved to deployments/deployment.json");
 
   console.log("\n=== Deployment Complete — Celo Mainnet ===");
   console.log("PaymentFactory:", factoryAddress);
