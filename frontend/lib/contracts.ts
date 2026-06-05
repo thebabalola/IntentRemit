@@ -1,6 +1,11 @@
 // PaymentFactory ABI
 export const PaymentFactoryABI = [
   {
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -215,6 +220,19 @@ export const PaymentFactoryABI = [
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "defaultRefundTimeout",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -272,6 +290,19 @@ export const PaymentFactoryABI = [
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -291,6 +322,19 @@ export const PaymentFactoryABI = [
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_timeout",
+        "type": "uint256"
+      }
+    ],
+    "name": "setDefaultRefundTimeout",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "totalPayments",
     "outputs": [
@@ -301,6 +345,19 @@ export const PaymentFactoryABI = [
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -372,6 +429,11 @@ export const ConditionalPaymentABI = [
         "internalType": "bytes",
         "name": "_conditionData",
         "type": "bytes"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_refundTimeout",
+        "type": "uint256"
       }
     ],
     "stateMutability": "payable",
@@ -467,19 +529,6 @@ export const ConditionalPaymentABI = [
     ],
     "name": "PaymentRefunded",
     "type": "event"
-  },
-  {
-    "inputs": [],
-    "name": "REFUND_TIMEOUT",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
   },
   {
     "inputs": [],
@@ -794,6 +843,19 @@ export const ConditionalPaymentABI = [
     "name": "refund",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "refundTimeout",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
