@@ -185,3 +185,29 @@ export function useApprovePayment() {
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
   return { approve, hash, isPending, isConfirming, isSuccess, error }
 }
+
+export function useGetFactoryOwner() {
+  return useReadContract({
+    address: PAYMENT_FACTORY_ADDRESS,
+    abi: PaymentFactoryABI,
+    functionName: 'owner',
+  })
+}
+
+export function useSetDefaultRefundTimeout() {
+  const { writeContract, data: hash, isPending, error } = useWriteContract()
+  async function setTimeout(timeout: bigint) {
+    writeContract({ address: PAYMENT_FACTORY_ADDRESS, abi: PaymentFactoryABI, functionName: 'setDefaultRefundTimeout', args: [timeout], type: 'legacy' })
+  }
+  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
+  return { setTimeout, hash, isPending, isConfirming, isSuccess, error }
+}
+
+export function useTransferOwnership() {
+  const { writeContract, data: hash, isPending, error } = useWriteContract()
+  async function transfer(newOwner: `0x${string}`) {
+    writeContract({ address: PAYMENT_FACTORY_ADDRESS, abi: PaymentFactoryABI, functionName: 'transferOwnership', args: [newOwner], type: 'legacy' })
+  }
+  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
+  return { transfer, hash, isPending, isConfirming, isSuccess, error }
+}
