@@ -1,5 +1,5 @@
 // PaymentFactory deployed on Celo Mainnet
-export const PAYMENT_FACTORY_ADDRESS = "0xf3850044Ee8d0498Cf07C5e820dd7Dd923fe869E" as `0x${string}`
+export const PAYMENT_FACTORY_ADDRESS = "0x118Fb8d67ea74A4Bef2Ce213981c73F09955e5F8" as `0x${string}`
 
 // Network configurations
 export const CELO_MAINNET = {

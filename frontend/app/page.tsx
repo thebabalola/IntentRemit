@@ -6,6 +6,7 @@ import { parseEther, formatEther, erc20Abi } from "viem";
 import { motion, AnimatePresence } from "framer-motion";
 import OnboardingTour from "@/components/OnboardingTour";
 import { DashboardSkeleton } from "@/components/SkeletonLoaders";
+import AdminPanel from "@/components/AdminPanel";
 import {
   Plus,
   History,
@@ -33,13 +34,14 @@ import {
   useExecuteLocked,
   useRefundPayment,
   useGetPaymentAddress,
+  useGetFactoryOwner,
 } from "@/lib/hooks";
 import { ConditionType } from "@/lib/constants";
 
 export default function Home() {
   // Main entry point for IntentRemit - Diaspora-focused programmable remittances
   const { address, isConnected } = useAccount();
-  const [activeTab, setActiveTab] = useState<"create" | "status">("create");
+  const [activeTab, setActiveTab] = useState<"create" | "status" | "admin">("create");
   const [copied, setCopied] = useState(false);
   const [status, setStatus] = useState<{
     type: "success" | "error";
@@ -87,6 +89,7 @@ export default function Home() {
 
   const { data: userPaymentsData, isLoading: loadingPayments } =
     useUserPayments(address || "0x");
+  const { data: factoryOwner } = useGetFactoryOwner();
   const isNative = token === "0x0000000000000000000000000000000000000000";
   const { data: nativeBalance } = useBalance({
     address,
@@ -265,6 +268,14 @@ export default function Home() {
               label="My Dashboard"
               count={paymentIds.length}
             />
+            {isConnected && address && factoryOwner && address.toLowerCase() === (factoryOwner as string).toLowerCase() && (
+              <TabButton
+                active={activeTab === "admin"}
+                onClick={() => setActiveTab("admin")}
+                icon={<ShieldCheck size={18} />}
+                label="Admin Panel"
+              />
+            )}
             {isConnected && address && (
               <div className="col-span-2 mt-2 lg:mt-4 px-2 py-1 flex items-center justify-between text-xs font-bold">
                 <span className="text-gray-500 uppercase tracking-widest text-[9px] font-black">Connected Wallet</span>
@@ -621,6 +632,15 @@ export default function Home() {
                         : "Connect Wallet to Start"}
                     </button>
                   </form>
+                </motion.div>
+              ) : activeTab === "admin" && isConnected && address && factoryOwner && address.toLowerCase() === (factoryOwner as string).toLowerCase() ? (
+                <motion.div
+                  key="admin"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                >
+                  <AdminPanel />
                 </motion.div>
               ) : (
                 <motion.div

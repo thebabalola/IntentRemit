@@ -14,6 +14,7 @@ The mobile-first web interface for **IntentRemit**, allowing diaspora senders to
 - **Goal Selection**: User-friendly flow to select remittance intents.
 - **Split Configuration**: Interactive sliders/inputs to define immediate vs. locked portions.
 - **Growth Dashboard**: Visualization of locked funds and release timelines.
+- **Secure Admin Panel**: A gated admin dashboard explicitly restricted to the original contract deployer wallet. This panel supports critical smart contract interactions such as dynamically modifying the global refund timeout duration and transferring the factory contract's ownership.
 
 ---
 
