@@ -175,8 +175,20 @@ export default function Home() {
     return Number((locked * 1.045).toFixed(8)).toString(); // 4.5% APY
   }, [totalAmount, immediateAmount]);
 
-  const handleCreate = async (e: React.FormEvent) => {
+  const isInsufficientBalance = useMemo(() => {
+    if (!balanceData || !totalAmount) return false;
+    return parseFloat(totalAmount) > parseFloat(balanceData.formatted);
+  }, [totalAmount, balanceData]);
+
+  const [showSimulationModal, setShowSimulationModal] = useState(false);
+
+  const handleSimulate = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!recipient || !totalAmount) return;
+    setShowSimulationModal(true);
+  };
+
+  const handleCreate = async () => {
     setStatus(null);
 
     try {
@@ -327,7 +339,7 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <form onSubmit={handleCreate} className="space-y-8">
+                  <form onSubmit={handleSimulate} className="space-y-8">
                     {/* Goal Selection */}
                     <div id="goal-selection" className="space-y-4">
                       <label className="text-xs font-black uppercase tracking-widest text-gray-500 ml-1">
@@ -462,12 +474,17 @@ export default function Home() {
                               onClick={() =>
                                 setTotalAmount(balanceData.formatted)
                               }
-                              className="text-celoyellow hover:text-celogold transition-colors"
+                              className="text-celoyellow hover:text-celogold transition-colors px-2 py-0.5 rounded bg-celoyellow/10"
                             >
                               USE MAX
                             </button>
                           )}
                         </div>
+                        {isInsufficientBalance && (
+                          <div className="text-red-500 text-xs font-bold mt-1 px-1">
+                            ⚠️ Insufficient Balance (You have {Number(balanceData?.formatted || "0").toLocaleString(undefined, { maximumFractionDigits: 6 })} {balanceData?.symbol})
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -619,16 +636,14 @@ export default function Home() {
 
                     <button
                       type="submit"
-                      disabled={createTimestamp.isPending || !isConnected}
+                      disabled={!isConnected || isInsufficientBalance}
                       className="w-full h-14 bg-gradient-to-r from-celoyellow to-celogold hover:scale-[1.02] active:scale-[0.98] transition-all rounded-2xl font-bold text-black flex items-center justify-center gap-3 disabled:opacity-50 disabled:grayscale"
                     >
-                      {createTimestamp.isPending ? (
-                        <Loader2 className="animate-spin" />
-                      ) : (
-                        <ArrowRight size={20} />
-                      )}
+                      <ArrowRight size={20} />
                       {isConnected
-                        ? "Confirm Intent"
+                        ? isInsufficientBalance
+                          ? "Insufficient Balance"
+                          : "Simulate & Confirm Intent"
                         : "Connect Wallet to Start"}
                     </button>
                   </form>
@@ -697,6 +712,106 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      <AnimatePresence>
+        {showSimulationModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+          >
+            <motion.div
+              initial={{ scale: 0.95, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 20 }}
+              className="w-full max-w-md bg-[#0b0a05] border border-celoyellow/20 rounded-3xl p-6 shadow-2xl overflow-hidden relative"
+            >
+              {/* Background Glow */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-32 bg-celoyellow/10 blur-[50px] pointer-events-none" />
+
+              <div className="relative z-10">
+                <h3 className="text-xl font-bold text-white mb-2 text-center">Transaction Simulation</h3>
+                
+                {(createTimestamp.isPending || createManual.isPending) ? (
+                  <div className="py-8 text-center space-y-4">
+                    <Loader2 size={48} className="animate-spin text-celoyellow mx-auto" />
+                    <p className="text-celoyellow font-bold animate-pulse">Broadcasting to Celo Network...</p>
+                    <p className="text-sm text-gray-500">Please sign the transaction in your wallet.</p>
+                  </div>
+                ) : (createTimestamp.isConfirming || createManual.isConfirming) ? (
+                  <div className="py-8 text-center space-y-4">
+                    <div className="w-12 h-12 border-4 border-celoyellow/30 border-t-celoyellow rounded-full animate-spin mx-auto" />
+                    <p className="text-celoyellow font-bold animate-pulse">Confirming Block...</p>
+                    <p className="text-sm text-gray-500">Waiting for network confirmation.</p>
+                  </div>
+                ) : (createTimestamp.isSuccess || createManual.isSuccess) ? (
+                  <div className="py-8 text-center space-y-4">
+                    <div className="w-16 h-16 bg-green-500/20 text-green-500 rounded-full flex items-center justify-center mx-auto border border-green-500/50">
+                      <Check size={32} />
+                    </div>
+                    <p className="text-green-500 font-bold text-xl">Transaction Confirmed!</p>
+                    <button
+                      onClick={() => {
+                        setShowSimulationModal(false);
+                        setActiveTab("status");
+                        setTotalAmount("");
+                      }}
+                      className="mt-4 px-6 py-2 bg-white/10 hover:bg-white/20 rounded-xl font-bold transition-all"
+                    >
+                      View Dashboard
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <p className="text-gray-400 text-sm text-center mb-6">
+                      You are about to lock funds into the IntentRemit smart contract.
+                    </p>
+                    
+                    <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-3 mb-6">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-500">Total Amount:</span>
+                        <span className="font-bold text-white">{totalAmount} {balanceData?.symbol}</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-500">Immediate Unlock:</span>
+                        <span className="font-bold text-white">{immediateAmount} {balanceData?.symbol}</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-500">Locked to Vault:</span>
+                        <span className="font-bold text-celoyellow">
+                          {Number((parseFloat(totalAmount || "0") - parseFloat(immediateAmount)).toFixed(8)).toString()} {balanceData?.symbol}
+                        </span>
+                      </div>
+                      <div className="border-t border-white/10 pt-3 flex justify-between text-xs">
+                        <span className="text-gray-500">Estimated Gas:</span>
+                        <span className="font-mono text-gray-400">~0.0002 CELO</span>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setShowSimulationModal(false)}
+                        className="flex-1 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl font-bold transition-all text-gray-300"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleCreate}
+                        className="flex-1 py-3 bg-gradient-to-r from-celoyellow to-celogold hover:scale-[1.02] active:scale-[0.98] transition-all rounded-xl font-bold text-black"
+                      >
+                        Proceed & Sign
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   );
 }
