@@ -455,19 +455,8 @@ export default function Home() {
                             className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm outline-none"
                           />
                         </div>
-                        {/* Live Raw Unit conversion display */}
-                        <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest mt-2 px-1">
-                          <div className="flex items-center gap-2">
-                            <span className="text-gray-600">=</span>
-                            <span className="text-celoyellow">
-                              {totalAmount
-                                ? parseEther(totalAmount).toString()
-                                : "0"}
-                            </span>
-                            <span className="text-gray-600">
-                              Raw Units (Wei)
-                            </span>
-                          </div>
+                        {/* Max Button Container */}
+                        <div className="flex items-center justify-end text-[10px] font-black uppercase tracking-widest mt-2 px-1">
                           {balanceData && (
                             <button
                               type="button"
