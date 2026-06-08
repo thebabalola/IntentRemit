@@ -23,14 +23,14 @@ export default function Navbar() {
   }, [connect, isConnected]);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 px-6 py-4">
+    <header className="fixed top-0 left-0 right-0 z-50 px-3 py-3 md:px-6 md:py-4">
       <motion.div 
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="max-w-7xl mx-auto flex items-center justify-between bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-2xl px-6 py-3 shadow-2xl"
+        className="max-w-7xl mx-auto flex items-center justify-between bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-2xl px-4 py-2 md:px-6 md:py-3 shadow-2xl"
       >
         <Link href="/" className="flex items-center gap-3">
-          <div className="w-14 h-14 flex items-center justify-center">
+          <div className="w-10 h-10 md:w-14 md:h-14 flex items-center justify-center">
             <img 
               src="/intentremit-logo.svg" 
               alt="" 
