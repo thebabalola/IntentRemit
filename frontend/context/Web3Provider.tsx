@@ -37,7 +37,7 @@ createAppKit({
   },
   themeMode: 'dark',
   themeVariables: {
-    '--w3m-accent': '#22c55e',
+    '--w3m-accent': '#FCFF52',
     '--w3m-color-mix': '#050505',
     '--w3m-color-mix-strength': 20,
     '--w3m-border-radius-master': '12px',
