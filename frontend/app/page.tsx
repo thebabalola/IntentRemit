@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { useAccount, useBalance, useReadContract } from "wagmi";
+import { useAppKit } from "@reown/appkit/react";
 import { parseEther, formatEther, erc20Abi } from "viem";
 import { motion, AnimatePresence } from "framer-motion";
 import OnboardingTour from "@/components/OnboardingTour";
@@ -41,6 +42,7 @@ import { ConditionType } from "@/lib/constants";
 export default function Home() {
   // Main entry point for IntentRemit - Diaspora-focused programmable remittances
   const { address, isConnected } = useAccount();
+  const { open } = useAppKit();
   const [activeTab, setActiveTab] = useState<"create" | "status" | "admin">("create");
   const [copied, setCopied] = useState(false);
   const [status, setStatus] = useState<{
@@ -666,7 +668,12 @@ export default function Home() {
                       <p className="text-gray-500 mb-8">
                         Connect your wallet to manage your remittance intents
                       </p>
-                      <appkit-button />
+                      <button
+                        onClick={() => open()}
+                        className="bg-celoyellow text-black font-bold py-3 px-8 rounded-xl text-sm hover:bg-celoyellow/90 transition-colors shadow-[0_0_20px_rgba(252,255,82,0.2)] active:scale-95 transition-all cursor-pointer mx-auto block"
+                      >
+                        CONNECT WALLET
+                      </button>
                     </div>
                   ) : loadingPayments ? (
                     <DashboardSkeleton />
