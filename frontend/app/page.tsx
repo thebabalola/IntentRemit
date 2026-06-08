@@ -479,7 +479,7 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <div className="border-b border-white/5 my-6" />
+                    <div className="border-t-2 border-dashed border-white/15 my-8" />
 
                     {/* Split Slider */}
                     <div
@@ -569,7 +569,7 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <div className="border-b border-white/5 my-6" />
+                    <div className="border-t-2 border-dashed border-white/15 my-8" />
 
                     <div className="space-y-4">
                       <label className="text-xs font-black uppercase tracking-widest text-gray-500 ml-1">
