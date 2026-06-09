@@ -177,6 +177,13 @@ export default function Home() {
     return Number((locked * 1.045).toFixed(8)).toString(); // 4.5% APY
   }, [totalAmount, immediateAmount]);
 
+  const getUSDValue = (amountStr: string) => {
+    const amount = parseFloat(amountStr || "0");
+    if (isNaN(amount)) return "0.00";
+    const rate = token === "0x0000000000000000000000000000000000000000" ? 0.62 : 1.00;
+    return (amount * rate).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  };
+
   const isInsufficientBalance = useMemo(() => {
     if (!balanceData || !totalAmount) return false;
     return parseFloat(totalAmount) > parseFloat(balanceData.formatted);
@@ -448,23 +455,36 @@ export default function Home() {
                               cUSD
                             </option>
                           </select>
-                          <input
-                            type="number"
-                            step="any"
-                            placeholder="0.00"
-                            value={totalAmount}
-                            onChange={(e) => setTotalAmount(e.target.value)}
-                            className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm outline-none"
-                          />
+                          <div className="relative flex-1">
+                            <input
+                              type="number"
+                              step="any"
+                              placeholder="0.00"
+                              value={totalAmount}
+                              onChange={(e) => setTotalAmount(e.target.value)}
+                              className="w-full bg-white/5 border border-white/10 rounded-xl pl-4 pr-24 py-3 text-sm outline-none"
+                            />
+                            {totalAmount && !isNaN(parseFloat(totalAmount)) && (
+                              <div className="absolute right-3 top-3 text-[11px] text-gray-400 font-medium pointer-events-none">
+                                ≈ ${(parseFloat(totalAmount) * (token === "0x0000000000000000000000000000000000000000" ? 0.62 : 1.00)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD
+                              </div>
+                            )}
+                          </div>
                         </div>
                         {/* Max Button Container */}
                         <div className="flex items-center justify-end text-[10px] font-black uppercase tracking-widest mt-2 px-1">
                           {balanceData && (
                             <button
                               type="button"
-                              onClick={() =>
-                                setTotalAmount(balanceData.formatted)
-                              }
+                              onClick={() => {
+                                if (token === "0x0000000000000000000000000000000000000000") {
+                                  const balVal = parseFloat(balanceData.formatted);
+                                  const maxVal = Math.max(0, balVal - 0.05);
+                                  setTotalAmount(maxVal.toString());
+                                } else {
+                                  setTotalAmount(balanceData.formatted);
+                                }
+                              }}
                               className="text-celoyellow hover:text-celogold transition-colors px-2 py-0.5 rounded bg-celoyellow/10"
                             >
                               USE MAX
@@ -729,79 +749,158 @@ export default function Home() {
               <div className="relative z-10">
                 <h3 className="text-xl font-bold text-white mb-2 text-center">Transaction Simulation</h3>
                 
-                {(createTimestamp.isPending || createManual.isPending) ? (
-                  <div className="py-8 text-center space-y-4">
-                    <Loader2 size={48} className="animate-spin text-celoyellow mx-auto" />
-                    <p className="text-celoyellow font-bold animate-pulse">Broadcasting to Celo Network...</p>
-                    <p className="text-sm text-gray-500">Please sign the transaction in your wallet.</p>
+                {/* Transaction details (always visible during simulation) */}
+                <p className="text-gray-400 text-sm text-center mb-6">
+                  You are about to lock funds into the IntentRemit smart contract.
+                </p>
+                
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-3 mb-6">
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="text-gray-500">Total Amount:</span>
+                    <span className="font-bold text-white text-right">
+                      {totalAmount} {balanceData?.symbol} <span className="text-gray-400 text-xs font-normal block sm:inline">(≈ ${getUSDValue(totalAmount)} USD)</span>
+                    </span>
                   </div>
-                ) : (createTimestamp.isConfirming || createManual.isConfirming) ? (
-                  <div className="py-8 text-center space-y-4">
-                    <div className="w-12 h-12 border-4 border-celoyellow/30 border-t-celoyellow rounded-full animate-spin mx-auto" />
-                    <p className="text-celoyellow font-bold animate-pulse">Confirming Block...</p>
-                    <p className="text-sm text-gray-500">Waiting for network confirmation.</p>
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="text-gray-500">Immediate Unlock:</span>
+                    <span className="font-bold text-white text-right">
+                      {immediateAmount} {balanceData?.symbol} <span className="text-gray-400 text-xs font-normal block sm:inline">(≈ ${getUSDValue(immediateAmount)} USD)</span>
+                    </span>
                   </div>
-                ) : (createTimestamp.isSuccess || createManual.isSuccess) ? (
-                  <div className="py-8 text-center space-y-4">
-                    <div className="w-16 h-16 bg-green-500/20 text-green-500 rounded-full flex items-center justify-center mx-auto border border-green-500/50">
-                      <Check size={32} />
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="text-gray-500">Locked to Vault:</span>
+                    <span className="font-bold text-celoyellow text-right">
+                      {Number((parseFloat(totalAmount || "0") - parseFloat(immediateAmount)).toFixed(8)).toString()} {balanceData?.symbol}{" "}
+                      <span className="text-celoyellow/80 text-xs font-normal block sm:inline">(≈ ${getUSDValue((parseFloat(totalAmount || "0") - parseFloat(immediateAmount)).toString())} USD)</span>
+                    </span>
+                  </div>
+                  <div className="border-t border-white/10 pt-3 flex justify-between text-xs">
+                    <span className="text-gray-500">Estimated Gas:</span>
+                    <span className="font-mono text-gray-400">~0.0002 CELO (≈ $0.0001 USD)</span>
+                  </div>
+                </div>
+
+                {/* Vertical Stepper / Lifecycle HUD */}
+                <div className="space-y-4 my-6 bg-white/[0.02] border border-white/5 rounded-2xl p-4">
+                  {/* Step 1: Pre-flight Simulation */}
+                  <div className="flex items-center gap-3">
+                    <div className="w-5 h-5 rounded-full flex items-center justify-center bg-green-500/20 text-green-500 border border-green-500/30 text-[10px] font-bold shrink-0">
+                      ✓
                     </div>
-                    <p className="text-green-500 font-bold text-xl">Transaction Confirmed!</p>
+                    <div className="flex-1">
+                      <p className="text-xs font-bold text-white">Pre-flight Simulation</p>
+                      <p className="text-[9px] text-gray-400">Validated balance, gas fees & split ratios.</p>
+                    </div>
+                  </div>
+
+                  {/* Step 2: Request Wallet Signature */}
+                  <div className="flex items-center gap-3">
+                    <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold border shrink-0 ${
+                      (createTimestamp.isConfirming || createManual.isConfirming || createTimestamp.isSuccess || createManual.isSuccess)
+                        ? "bg-green-500/20 text-green-500 border-green-500/30"
+                        : (createTimestamp.isPending || createManual.isPending)
+                        ? "bg-celoyellow/20 text-celoyellow border-celoyellow/50 animate-pulse"
+                        : "bg-white/5 text-gray-500 border-white/5"
+                    }`}>
+                      {(createTimestamp.isConfirming || createManual.isConfirming || createTimestamp.isSuccess || createManual.isSuccess) ? "✓" : "2"}
+                    </div>
+                    <div className="flex-1">
+                      <p className={`text-xs font-bold ${
+                        (createTimestamp.isPending || createManual.isPending)
+                          ? "text-celoyellow"
+                          : (createTimestamp.isConfirming || createManual.isConfirming || createTimestamp.isSuccess || createManual.isSuccess)
+                          ? "text-white"
+                          : "text-gray-500"
+                      }`}>
+                        Request Wallet Signature
+                      </p>
+                      <p className="text-[9px] text-gray-400">
+                        {(createTimestamp.isPending || createManual.isPending)
+                          ? "Awaiting wallet approval..."
+                          : (createTimestamp.isConfirming || createManual.isConfirming || createTimestamp.isSuccess || createManual.isSuccess)
+                          ? "Signature approved."
+                          : "Sign transaction to deploy intent."}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Step 3: Confirmation */}
+                  <div className="flex items-center gap-3">
+                    <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold border shrink-0 ${
+                      (createTimestamp.isSuccess || createManual.isSuccess)
+                        ? "bg-green-500/20 text-green-500 border-green-500/30"
+                        : (createTimestamp.isConfirming || createManual.isConfirming)
+                        ? "bg-celoyellow/20 text-celoyellow border-celoyellow/50 animate-spin"
+                        : "bg-white/5 text-gray-500 border-white/5"
+                    }`}>
+                      {(createTimestamp.isSuccess || createManual.isSuccess) ? "✓" : "3"}
+                    </div>
+                    <div className="flex-1">
+                      <p className={`text-xs font-bold ${
+                        (createTimestamp.isConfirming || createManual.isConfirming)
+                          ? "text-celoyellow animate-pulse"
+                          : (createTimestamp.isSuccess || createManual.isSuccess)
+                          ? "text-white"
+                          : "text-gray-500"
+                      }`}>
+                        Celo Block Confirmation
+                      </p>
+                      <p className="text-[9px] text-gray-400">
+                        {(createTimestamp.isConfirming || createManual.isConfirming)
+                          ? "Waiting for blocks to index..."
+                          : (createTimestamp.isSuccess || createManual.isSuccess)
+                          ? "Confirmed on Celo mainnet!"
+                          : "Awaiting broadcast."}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Error handling */}
+                {(createTimestamp.error || createManual.error) && (
+                  <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-500 text-xs font-medium my-4">
+                    ⚠️ {createTimestamp.error?.message?.split("\n")[0] || createManual.error?.message?.split("\n")[0] || "Transaction rejected or failed."}
+                  </div>
+                )}
+
+                {/* Footer Controls */}
+                {(createTimestamp.isSuccess || createManual.isSuccess) ? (
+                  <div className="text-center mt-6">
                     <button
+                      type="button"
                       onClick={() => {
                         setShowSimulationModal(false);
                         setActiveTab("status");
                         setTotalAmount("");
                       }}
-                      className="mt-4 px-6 py-2 bg-white/10 hover:bg-white/20 rounded-xl font-bold transition-all"
+                      className="w-full py-3 bg-green-500 hover:bg-green-600 rounded-xl font-bold transition-all text-black flex items-center justify-center gap-2"
                     >
+                      <Check size={18} />
                       View Dashboard
                     </button>
                   </div>
+                ) : (createTimestamp.isPending || createManual.isPending || createTimestamp.isConfirming || createManual.isConfirming) ? (
+                  <div className="py-4 text-center">
+                    <Loader2 className="animate-spin text-celoyellow mx-auto mb-2" size={24} />
+                    <p className="text-xs text-gray-400">Processing transaction...</p>
+                  </div>
                 ) : (
-                  <>
-                    <p className="text-gray-400 text-sm text-center mb-6">
-                      You are about to lock funds into the IntentRemit smart contract.
-                    </p>
-                    
-                    <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-3 mb-6">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-500">Total Amount:</span>
-                        <span className="font-bold text-white">{totalAmount} {balanceData?.symbol}</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-500">Immediate Unlock:</span>
-                        <span className="font-bold text-white">{immediateAmount} {balanceData?.symbol}</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-500">Locked to Vault:</span>
-                        <span className="font-bold text-celoyellow">
-                          {Number((parseFloat(totalAmount || "0") - parseFloat(immediateAmount)).toFixed(8)).toString()} {balanceData?.symbol}
-                        </span>
-                      </div>
-                      <div className="border-t border-white/10 pt-3 flex justify-between text-xs">
-                        <span className="text-gray-500">Estimated Gas:</span>
-                        <span className="font-mono text-gray-400">~0.0002 CELO</span>
-                      </div>
-                    </div>
-
-                    <div className="flex gap-3">
-                      <button
-                        type="button"
-                        onClick={() => setShowSimulationModal(false)}
-                        className="flex-1 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl font-bold transition-all text-gray-300"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        type="button"
-                        onClick={handleCreate}
-                        className="flex-1 py-3 bg-gradient-to-r from-celoyellow to-celogold hover:scale-[1.02] active:scale-[0.98] transition-all rounded-xl font-bold text-black"
-                      >
-                        Proceed & Sign
-                      </button>
-                    </div>
-                  </>
+                  <div className="flex gap-3 mt-6">
+                    <button
+                      type="button"
+                      onClick={() => setShowSimulationModal(false)}
+                      className="flex-1 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl font-bold transition-all text-gray-300"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleCreate}
+                      className="flex-1 py-3 bg-gradient-to-r from-celoyellow to-celogold hover:scale-[1.02] active:scale-[0.98] transition-all rounded-xl font-bold text-black"
+                    >
+                      Proceed & Sign
+                    </button>
+                  </div>
                 )}
               </div>
             </motion.div>
