@@ -1,0 +1,15 @@
+{
+  "name": "IntentRemit",
+  "short_name": "IntentRemit",
+  "icons": [
+    {
+      "src": "/intentremit-logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "theme_color": "#050505",
+  "background_color": "#050505",
+  "display": "standalone",
+  "start_url": "/"
+}

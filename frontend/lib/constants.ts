@@ -1,5 +1,7 @@
+import { CONTRACT_ADDRESSES } from "./constants/contracts";
+
 // PaymentFactory deployed on Celo Mainnet
-export const PAYMENT_FACTORY_ADDRESS = "0x118Fb8d67ea74A4Bef2Ce213981c73F09955e5F8" as `0x${string}`
+export const PAYMENT_FACTORY_ADDRESS = CONTRACT_ADDRESSES.PAYMENT_FACTORY;
 
 // Network configurations
 export const CELO_MAINNET = {
