@@ -58,6 +58,8 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+import SecurityNotice from "@/components/SecurityNotice";
+
 export default function RootLayout({
   children,
 }: {
@@ -67,6 +69,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className="antialiased bg-black selection:bg-green-500/30" suppressHydrationWarning>
         <Web3Provider>
+          <SecurityNotice />
           <Navbar />
           <ClientLayout>{children}</ClientLayout>
         </Web3Provider>

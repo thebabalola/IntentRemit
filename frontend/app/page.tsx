@@ -38,6 +38,7 @@ import {
   useGetFactoryOwner,
 } from "@/lib/hooks";
 import { ConditionType } from "@/lib/constants";
+import { CONTRACT_ADDRESSES } from "@/lib/constants/contracts";
 
 export default function Home() {
   // Main entry point for IntentRemit - Diaspora-focused programmable remittances
@@ -80,7 +81,7 @@ export default function Home() {
   const [immediatePercentage, setImmediatePercentage] = useState(50);
   const [goal, setGoal] = useState("School Fees");
   const [token, setToken] = useState(
-    "0x0000000000000000000000000000000000000000",
+    CONTRACT_ADDRESSES.CELO,
   ); // Native CELO
   const [conditionType, setConditionType] = useState<ConditionType>(
     ConditionType.TIMESTAMP,
@@ -92,7 +93,7 @@ export default function Home() {
   const { data: userPaymentsData, isLoading: loadingPayments } =
     useUserPayments(address || "0x");
   const { data: factoryOwner } = useGetFactoryOwner();
-  const isNative = token === "0x0000000000000000000000000000000000000000";
+  const isNative = token === CONTRACT_ADDRESSES.CELO;
   const { data: nativeBalance } = useBalance({
     address,
     query: { enabled: isNative && !!address },
@@ -117,7 +118,7 @@ export default function Home() {
       return {
         formatted: formatEther(tokenBalance as bigint),
         symbol:
-          token === "0x765DE816845861e75A25fCA122bb6898B8B1282a"
+          token === CONTRACT_ADDRESSES.CUSD
             ? "cUSD"
             : "TOKEN",
         decimals: 18,
@@ -180,7 +181,7 @@ export default function Home() {
   const getUSDValue = (amountStr: string) => {
     const amount = parseFloat(amountStr || "0");
     if (isNaN(amount)) return "0.00";
-    const rate = token === "0x0000000000000000000000000000000000000000" ? 0.62 : 1.00;
+    const rate = token === CONTRACT_ADDRESSES.CELO ? 0.62 : 1.00;
     return (amount * rate).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   };
 
@@ -448,10 +449,10 @@ export default function Home() {
                             onChange={(e) => setToken(e.target.value)}
                             className="bg-white/5 border border-white/10 rounded-xl px-3 text-xs outline-none"
                           >
-                            <option value="0x0000000000000000000000000000000000000000">
+                            <option value={CONTRACT_ADDRESSES.CELO}>
                               CELO
                             </option>
-                            <option value="0x765DE816845861e75A25fCA122bb6898B8B1282a">
+                            <option value={CONTRACT_ADDRESSES.CUSD}>
                               cUSD
                             </option>
                           </select>
@@ -466,7 +467,7 @@ export default function Home() {
                             />
                             {totalAmount && !isNaN(parseFloat(totalAmount)) && (
                               <div className="absolute right-3 top-3 text-[11px] text-gray-400 font-medium pointer-events-none">
-                                ≈ ${(parseFloat(totalAmount) * (token === "0x0000000000000000000000000000000000000000" ? 0.62 : 1.00)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD
+                                ≈ ${parseFloat(totalAmount) ? "" : ""}${(parseFloat(totalAmount) * (token === CONTRACT_ADDRESSES.CELO ? 0.62 : 1.00)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD
                               </div>
                             )}
                           </div>
@@ -477,7 +478,7 @@ export default function Home() {
                             <button
                               type="button"
                               onClick={() => {
-                                if (token === "0x0000000000000000000000000000000000000000") {
+                                if (token === CONTRACT_ADDRESSES.CELO) {
                                   const balVal = parseFloat(balanceData.formatted);
                                   const maxVal = Math.max(0, balVal - 0.05);
                                   setTotalAmount(maxVal.toString());
@@ -571,7 +572,7 @@ export default function Home() {
                           </div>
                           <div>
                             <div className="text-[10px] font-black uppercase tracking-widest text-celogold/70">
-                              Yield Protocol (4.5% APY)
+                              Yield Protocol (Simulated 4.5% APY)
                             </div>
                             <div className="text-sm font-bold text-celogold">
                               Simulated 1yr Growth
@@ -776,7 +777,7 @@ export default function Home() {
                   </div>
                   <div className="border-t border-white/10 pt-3 flex justify-between text-xs">
                     <span className="text-gray-500">Estimated Gas:</span>
-                    <span className="font-mono text-gray-400">~0.0002 CELO (≈ $0.0001 USD)</span>
+                    <span className="font-mono text-gray-400">~0.0002 CELO (≈ $0.0001 USD Est.)</span>
                   </div>
                 </div>
 
@@ -1135,7 +1136,7 @@ function PaymentItem({ paymentId }: { paymentId: bigint }) {
             </div>
             <h3 className="text-lg font-bold flex items-center gap-2">
               {payment.totalAmount}{" "}
-              {payment.token === "0x0000000000000000000000000000000000000000"
+              {payment.token === CONTRACT_ADDRESSES.CELO
                 ? "CELO"
                 : "cUSD"}
               <ArrowRight size={16} className="text-gray-600" />

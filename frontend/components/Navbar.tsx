@@ -55,7 +55,7 @@ export default function Navbar() {
         <nav className="hidden md:flex items-center gap-8 text-[11px] font-black uppercase tracking-[0.2em] text-gray-500">
           <Link href="#create" className="hover:text-celoyellow transition-colors">Create</Link>
           <Link href="#dashboard" className="hover:text-celoyellow transition-colors">Dashboard</Link>
-          <a href="https://celoscan.io/address/0xf3850044Ee8d0498Cf07C5e820dd7Dd923fe869E" target="_blank" rel="noopener noreferrer" className="hover:text-celoyellow transition-colors">Protocol</a>
+          <a href="https://celoscan.io/address/0x118Fb8d67ea74A4Bef2Ce213981c73F09955e5F8" target="_blank" rel="noopener noreferrer" className="hover:text-celoyellow transition-colors">Protocol</a>
         </nav>
 
         <div className="flex items-center gap-4">
