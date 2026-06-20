@@ -202,7 +202,19 @@ export default function Home() {
 
   const handleSimulate = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!recipient || !totalAmount) return;
+    setStatus(null);
+    if (!recipient || !totalAmount) {
+      setStatus({ type: "error", message: "Please fill in recipient and total amount." });
+      return;
+    }
+    if (conditionType === ConditionType.TIMESTAMP && !executeAt) {
+      setStatus({ type: "error", message: "Please select an unlock date." });
+      return;
+    }
+    if (conditionType === ConditionType.MANUAL && !approvers) {
+      setStatus({ type: "error", message: "Please enter approver addresses." });
+      return;
+    }
     setShowSimulationModal(true);
   };
 
@@ -211,6 +223,7 @@ export default function Home() {
 
     try {
       if (conditionType === ConditionType.TIMESTAMP) {
+        if (!executeAt) throw new Error("Execute date is required");
         const timestamp = BigInt(
           Math.floor(new Date(executeAt).getTime() / 1000),
         );
@@ -223,6 +236,7 @@ export default function Home() {
           executeAt: timestamp,
         });
       } else if (conditionType === ConditionType.MANUAL) {
+        if (!approvers) throw new Error("Approvers are required");
         const approverList = approvers
           .split(",")
           .map((a) => a.trim() as `0x${string}`)
@@ -654,6 +668,18 @@ export default function Home() {
 
                     <div className="border-b border-white/5 my-6" />
 
+                    {status && (
+                      <div
+                        className={`p-4 rounded-2xl text-sm font-bold flex items-center justify-center gap-2 ${
+                          status.type === "success"
+                            ? "bg-green-500/10 text-green-500 border border-green-500/20"
+                            : "bg-red-500/10 text-red-500 border border-red-500/20"
+                        }`}
+                      >
+                        {status.type === "success" ? "✓" : "⚠️"} {status.message}
+                      </div>
+                    )}
+
                     <button
                       type="submit"
                       disabled={!isConnected || isInsufficientBalance}
@@ -866,9 +892,9 @@ export default function Home() {
                 </div>
 
                 {/* Error handling */}
-                {(createTimestamp.error || createManual.error) && (
+                {(createTimestamp.error || createManual.error || (status?.type === "error" && status.message)) && (
                   <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-500 text-xs font-medium my-4">
-                    ⚠️ {createTimestamp.error?.message?.split("\n")[0] || createManual.error?.message?.split("\n")[0] || "Transaction rejected or failed."}
+                    ⚠️ {status?.message || createTimestamp.error?.message?.split("\n")[0] || createManual.error?.message?.split("\n")[0] || "Transaction rejected or failed."}
                   </div>
                 )}
 
