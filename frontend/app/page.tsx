@@ -446,7 +446,7 @@ export default function Home() {
                         <div className="flex gap-2">
                           <select
                             value={token}
-                            onChange={(e) => setToken(e.target.value)}
+                            onChange={(e) => setToken(e.target.value as `0x${string}`)}
                             className="bg-white/5 border border-white/10 rounded-xl px-3 text-xs outline-none"
                           >
                             <option value={CONTRACT_ADDRESSES.CELO}>
