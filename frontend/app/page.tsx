@@ -879,7 +879,7 @@ export default function Home() {
                       type="button"
                       onClick={() => {
                         setShowSimulationModal(false);
-                        setActiveTab("dashboard");
+                        setActiveTab("status");
                         setTotalAmount("");
                         createTimestamp.reset();
                         createManual.reset();
