@@ -879,8 +879,10 @@ export default function Home() {
                       type="button"
                       onClick={() => {
                         setShowSimulationModal(false);
-                        setActiveTab("status");
+                        setActiveTab("dashboard");
                         setTotalAmount("");
+                        createTimestamp.reset();
+                        createManual.reset();
                       }}
                       className="w-full py-3 bg-green-500 hover:bg-green-600 rounded-xl font-bold transition-all text-black flex items-center justify-center gap-2"
                     >
@@ -897,7 +899,11 @@ export default function Home() {
                   <div className="flex gap-3 mt-6">
                     <button
                       type="button"
-                      onClick={() => setShowSimulationModal(false)}
+                      onClick={() => {
+                        setShowSimulationModal(false);
+                        createTimestamp.reset();
+                        createManual.reset();
+                      }}
                       className="flex-1 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl font-bold transition-all text-gray-300"
                     >
                       Cancel

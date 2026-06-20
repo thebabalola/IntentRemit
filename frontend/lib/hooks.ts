@@ -35,7 +35,7 @@ export function useUserPayments(userAddress: `0x${string}`) {
 }
 
 export function useCreateTimestampPayment() {
-  const { writeContract, data: hash, isPending, error } = useWriteContract()
+  const { writeContract, data: hash, isPending, error, reset } = useWriteContract()
 
   async function createTimestampPayment({
     recipient,
@@ -68,11 +68,11 @@ export function useCreateTimestampPayment() {
 
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
 
-  return { createTimestampPayment, hash, isPending, isConfirming, isSuccess, error }
+  return { createTimestampPayment, hash, isPending, isConfirming, isSuccess, error, reset }
 }
 
 export function useCreateManualPayment() {
-  const { writeContract, data: hash, isPending, error } = useWriteContract()
+  const { writeContract, data: hash, isPending, error, reset } = useWriteContract()
 
   async function createManualPayment({
     recipient,
@@ -107,7 +107,7 @@ export function useCreateManualPayment() {
 
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
 
-  return { createManualPayment, hash, isPending, isConfirming, isSuccess, error }
+  return { createManualPayment, hash, isPending, isConfirming, isSuccess, error, reset }
 }
 
 // ============================================================================
