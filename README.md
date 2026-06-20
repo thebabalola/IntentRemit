@@ -258,3 +258,43 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 ---
 
 _Project maintained by @bbkenny._
+
+## 📖 How does IntentRemit work?
+
+This interface is the heart of **IntentRemit**. It is designed to let you send money (remittance) to someone while enforcing *how* and *when* they can use it, rather than just giving them all the cash at once. 
+
+Here is a step-by-step breakdown of how the interface works and how you should interact with it:
+
+### 1. Connect Your Wallet
+Before you can do anything, make sure you have connected your Web3 wallet (like MetaMask, MiniPay, or Valora) using the green **Connect Wallet** button in the top right. You must be on the **Celo Network**.
+
+### 2. Select Remittance Goal
+You start by selecting the purpose of the money you are sending. 
+* **Options:** `School Fees`, `Medical`, `Rent`, or `Business`.
+* **AI Suggestion:** When you click a goal (e.g., *School Fees*), a small AI banner appears suggesting the best way to split the money. For School Fees, it suggests locking 90% for future tuition and keeping 10% immediate. 
+* **Apply Split:** Clicking this button automatically moves your slider to match the AI's advice.
+
+### 3. Recipient & Amount
+* **Recipient Address:** Paste the `0x...` Celo wallet address of the person receiving the funds.
+* **Asset & Total Amount:** Choose whether you are sending **CELO** or **cUSD** from the dropdown, and type in the total amount you want to send. 
+* *Note:* You will see the total converted into "Raw Units (Wei)" below the input. This is just the blockchain's raw format for that number.
+
+### 4. Immediate vs. Locked Split
+This slider is where the magic happens. You use it to divide the Total Amount into two buckets:
+* **Recipient Gets Now:** The percentage of money the recipient can withdraw and spend the exact second you hit send.
+* **To Growth Vault (Locked Amount):** The percentage of money that is held back by the smart contract. 
+* **Yield Protocol:** The UI shows a simulated 1-year growth projection (at 4.5% APY) to demonstrate how the locked money could grow while it sits in the vault.
+
+### 5. Lock Conditions
+This determines *how* the locked money is eventually released to the recipient. You choose one of two options:
+* **Time-Locked:** You select a specific future Date and Time from a calendar dropdown. The smart contract will strictly hold the funds until that exact moment passes.
+* **Manual Approval:** This acts as an escrow or multi-sig. If you select this, new fields will appear asking for **Approver Addresses** and **Required Approvals**. The locked funds will only be released when those specific addresses vote to approve it.
+
+### 6. Confirm Intent
+Once the form is filled, click the large **Confirm Intent** button at the bottom. Your wallet will pop up asking you to sign the transaction. 
+
+### 7. My Dashboard (Tracking)
+Once you send it, you can click on the **My Dashboard** tab on the left sidebar. 
+* Here, you will see a list of all the purposeful transfers you've made. 
+* You can see the live countdown timer for Time-Locked funds.
+* If you are the recipient (or testing with your own alternate wallet), this is the same dashboard where you will see the **Claim Immediate** button and the **Unlock Vault** button (which only becomes clickable once the time has passed or approvals are met).

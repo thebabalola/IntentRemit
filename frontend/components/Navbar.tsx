@@ -7,7 +7,8 @@ import { useConnect, useAccount } from "wagmi";
 import { injected } from "wagmi/connectors";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useAppKit } from "@reown/appkit/react";
-import { Copy, Check, Wallet } from "lucide-react";
+import { Copy, Check, Wallet, HelpCircle } from "lucide-react";
+import HelpDrawer from "./HelpDrawer";
 
 export default function Navbar() {
   const { connect } = useConnect();
@@ -16,6 +17,7 @@ export default function Navbar() {
   const [isMiniPay, setIsMiniPay] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
 
   const handleCopy = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -59,12 +61,21 @@ export default function Navbar() {
         </nav>
 
         <div className="flex items-center gap-4">
+          <button
+            onClick={() => setIsHelpOpen(true)}
+            className="p-2 md:px-3 md:py-2 bg-white/5 hover:bg-white/10 active:scale-95 transition-all rounded-xl border border-white/10 text-white flex items-center gap-2 cursor-pointer"
+            title="How does IntentRemit work?"
+          >
+            <HelpCircle size={15} />
+            <span className="hidden md:inline text-[10px] font-black uppercase tracking-widest">Guide</span>
+          </button>
+          
           {!isMiniPay && (
             isConnected && address ? (
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleCopy}
-                  className="flex items-center gap-2 px-3 py-2 bg-celoyellow hover:bg-celoyellow/90 active:scale-95 transition-all rounded-xl text-xs font-black text-black font-mono select-none shadow-[0_0_20px_rgba(252,255,82,0.2)] cursor-pointer"
+                  className="hidden sm:flex items-center gap-2 px-3 py-2 bg-celoyellow hover:bg-celoyellow/90 active:scale-95 transition-all rounded-xl text-xs font-black text-black font-mono select-none shadow-[0_0_20px_rgba(252,255,82,0.2)] cursor-pointer"
                   title="Copy wallet address"
                 >
                   <span>{`${address.slice(0, 6)}...${address.slice(-4)}`}</span>
@@ -93,12 +104,14 @@ export default function Navbar() {
             )
           )}
           {isMiniPay && isConnected && (
-            <div className="px-4 py-2 bg-celoyellow/10 border border-celoyellow/20 rounded-xl text-[10px] font-black uppercase text-celoyellow tracking-widest">
+            <div className="px-4 py-2 bg-celoyellow/10 border border-celoyellow/20 rounded-xl text-[10px] font-black uppercase text-celoyellow tracking-widest hidden sm:block">
               MiniPay Active
             </div>
           )}
         </div>
       </motion.div>
+
+      <HelpDrawer isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
     </header>
   );
 }
