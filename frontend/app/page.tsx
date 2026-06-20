@@ -92,7 +92,7 @@ export default function Home() {
   const [approvers, setApprovers] = useState("");
   const [requiredApprovals, setRequiredApprovals] = useState("1");
 
-  const { data: userPaymentsData, isLoading: loadingPayments } =
+  const { data: userPaymentsData, isLoading: loadingPayments, refetch: refetchPayments } =
     useUserPayments(address || "0x");
   const { data: factoryOwner } = useGetFactoryOwner();
   const isNative = token === CONTRACT_ADDRESSES.CELO;
@@ -130,6 +130,12 @@ export default function Home() {
   }, [isNative, nativeBalance, tokenBalance, token]);
   const createTimestamp = useCreateTimestampPayment();
   const createManual = useCreateManualPayment();
+
+  useEffect(() => {
+    if (createTimestamp.isSuccess || createManual.isSuccess) {
+      refetchPayments();
+    }
+  }, [createTimestamp.isSuccess, createManual.isSuccess, refetchPayments]);
 
   const paymentIds = useMemo(
     () => (userPaymentsData as bigint[]) || [],

@@ -64,16 +64,40 @@ contract PaymentFactory {
         ConditionType conditionType,
         bytes calldata conditionData
     ) external payable returns (address paymentAddress) {
+        return _createPayment(
+            msg.sender,
+            msg.value,
+            recipient,
+            token,
+            totalAmount,
+            immediateAmount,
+            goal,
+            conditionType,
+            conditionData
+        );
+    }
+
+    function _createPayment(
+        address sender,
+        uint256 msgValue,
+        address recipient,
+        address token,
+        uint256 totalAmount,
+        uint256 immediateAmount,
+        string calldata goal,
+        ConditionType conditionType,
+        bytes memory conditionData
+    ) internal returns (address paymentAddress) {
         require(recipient != address(0), "Invalid recipient");
         require(totalAmount > 0, "Amount must be > 0");
         require(immediateAmount <= totalAmount, "Invalid split");
 
         // Handle token transfer if ERC20
         if (token != address(0)) {
-            require(msg.value == 0, "Native value with ERC20");
-            IERC20(token).safeTransferFrom(msg.sender, address(this), totalAmount);
+            require(msgValue == 0, "Native value with ERC20");
+            IERC20(token).safeTransferFrom(sender, address(this), totalAmount);
         } else {
-            require(msg.value == totalAmount, "Value mismatch");
+            require(msgValue == totalAmount, "Value mismatch");
         }
 
         totalPayments++;
@@ -82,7 +106,7 @@ contract PaymentFactory {
         ConditionalPayment payment = new ConditionalPayment{
             value: token == address(0) ? totalAmount : 0
         }(
-            msg.sender,
+            sender,
             recipient,
             token,
             totalAmount,
@@ -100,12 +124,12 @@ contract PaymentFactory {
 
         paymentAddress = address(payment);
         payments[paymentId] = paymentAddress;
-        userPayments[msg.sender].push(paymentId);
+        userPayments[sender].push(paymentId);
 
         emit PaymentCreated(
             paymentId,
             paymentAddress,
-            msg.sender,
+            sender,
             recipient,
             token,
             totalAmount,
@@ -127,7 +151,9 @@ contract PaymentFactory {
         string calldata goal,
         uint256 executeAt
     ) external payable returns (address) {
-        return this.createPayment{value: msg.value}(
+        return _createPayment(
+            msg.sender,
+            msg.value,
             recipient,
             token,
             totalAmount,
@@ -147,7 +173,9 @@ contract PaymentFactory {
         address[] calldata approvers,
         uint256 requiredApprovals
     ) external payable returns (address) {
-        return this.createPayment{value: msg.value}(
+        return _createPayment(
+            msg.sender,
+            msg.value,
             recipient,
             token,
             totalAmount,
