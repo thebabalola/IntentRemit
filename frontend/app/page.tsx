@@ -39,11 +39,13 @@ import {
 } from "@/lib/hooks";
 import { ConditionType } from "@/lib/constants";
 import { CONTRACT_ADDRESSES } from "@/lib/constants/contracts";
+import { useCeloPrice } from "@/hooks/useCeloPrice";
 
 export default function Home() {
   // Main entry point for IntentRemit - Diaspora-focused programmable remittances
-  const { address, isConnected } = useAccount();
   const { open } = useAppKit();
+  const celoUsdRate = useCeloPrice();
+  const { address, isConnected } = useAccount();
   const [activeTab, setActiveTab] = useState<"create" | "status" | "admin">("create");
   const [copied, setCopied] = useState(false);
   const [status, setStatus] = useState<{
@@ -181,7 +183,7 @@ export default function Home() {
   const getUSDValue = (amountStr: string) => {
     const amount = parseFloat(amountStr || "0");
     if (isNaN(amount)) return "0.00";
-    const rate = token === CONTRACT_ADDRESSES.CELO ? 0.62 : 1.00;
+    const rate = token === CONTRACT_ADDRESSES.CELO ? celoUsdRate : 1.00;
     return (amount * rate).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   };
 
@@ -467,7 +469,7 @@ export default function Home() {
                             />
                             {totalAmount && !isNaN(parseFloat(totalAmount)) && (
                               <div className="absolute right-3 top-3 text-[11px] text-gray-400 font-medium pointer-events-none">
-                                ≈ ${parseFloat(totalAmount) ? "" : ""}${(parseFloat(totalAmount) * (token === CONTRACT_ADDRESSES.CELO ? 0.62 : 1.00)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD
+                                ≈ ${parseFloat(totalAmount) ? "" : ""}{(parseFloat(totalAmount || "0") * (token === CONTRACT_ADDRESSES.CELO ? celoUsdRate : 1.00)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD
                               </div>
                             )}
                           </div>
@@ -777,7 +779,7 @@ export default function Home() {
                   </div>
                   <div className="border-t border-white/10 pt-3 flex justify-between text-xs">
                     <span className="text-gray-500">Estimated Gas:</span>
-                    <span className="font-mono text-gray-400">~0.0002 CELO (≈ $0.0001 USD Est.)</span>
+                    <span className="font-mono text-gray-400">~0.0002 CELO (≈ ${(0.0002 * celoUsdRate).toFixed(4)} USD Est.)</span>
                   </div>
                 </div>
 
