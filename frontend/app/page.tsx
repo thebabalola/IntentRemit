@@ -320,32 +320,6 @@ export default function Home() {
                 label="Admin Panel"
               />
             )}
-            {isConnected && address && (
-              <div className="col-span-2 mt-2 lg:mt-4 px-2 py-1 flex items-center justify-between text-xs font-bold">
-                <span className="text-gray-500 uppercase tracking-widest text-[9px] font-black">Connected Wallet</span>
-                <div className="flex items-center gap-1.5 text-celoyellow">
-                  <span className="font-mono tracking-wider">
-                    {address.slice(0, 6)}...{address.slice(-4)}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      navigator.clipboard.writeText(address);
-                      setCopied(true);
-                      setTimeout(() => setCopied(false), 2000);
-                    }}
-                    className="p-1 hover:bg-white/5 rounded transition-all active:scale-95 flex items-center justify-center shrink-0"
-                    title="Copy Address"
-                  >
-                    {copied ? (
-                      <Check size={12} className="text-celoyellow" />
-                    ) : (
-                      <Copy size={12} />
-                    )}
-                  </button>
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Main Content Area */}
