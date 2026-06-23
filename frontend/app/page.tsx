@@ -462,8 +462,13 @@ export default function Home() {
                               className="w-full bg-white/5 border border-white/10 rounded-xl pl-4 pr-24 py-3 text-sm outline-none"
                             />
                             {totalAmount && !isNaN(parseFloat(totalAmount)) && (
-                              <div className="absolute right-3 top-3 text-[11px] text-gray-400 font-medium pointer-events-none">
-                                ≈ ${parseFloat(totalAmount) ? "" : ""}{(parseFloat(totalAmount || "0") * (token === CONTRACT_ADDRESSES.CELO ? celoUsdRate : 1.00)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD
+                              <div className="absolute right-3 top-1/2 -translate-y-1/2 flex flex-col items-end gap-0.5 pointer-events-none">
+                                <span className="text-[11px] text-gray-400 font-medium leading-none">
+                                  ≈ ${parseFloat(totalAmount) ? "" : ""}{(parseFloat(totalAmount || "0") * (token === CONTRACT_ADDRESSES.CELO ? celoUsdRate : 1.00)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD
+                                </span>
+                                <span className="text-[10px] text-gray-500 font-mono leading-none">
+                                  {(parseFloat(totalAmount) * 1e18).toLocaleString('fullwide', {useGrouping:false})} Wei
+                                </span>
                               </div>
                             )}
                           </div>
