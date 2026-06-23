@@ -8,8 +8,21 @@ import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol
 contract PaymentFactory {
     using SafeERC20 for IERC20;
 
-    address public owner;
-    uint256 public defaultRefundTimeout = 30 days; // Governable by owner
+    address[] public adminList;
+    mapping(address => uint256) public adminIndexPlusOne;
+
+    // Admin Proposals
+    struct AdminProposal {
+        address candidate;
+        bool isAdd;
+        uint256 approvals;
+        bool executed;
+    }
+    mapping(uint256 => mapping(address => bool)) public hasApproved;
+    uint256 public nextProposalId;
+    mapping(uint256 => AdminProposal) public proposals;
+
+    uint256 public defaultRefundTimeout = 30 days; // Governable by admin
 
     uint256 public totalPayments;
     mapping(uint256 => address) public payments;
@@ -35,24 +48,73 @@ contract PaymentFactory {
     );
 
     constructor() {
-        owner = msg.sender;
+        adminList.push(msg.sender);
+        adminIndexPlusOne[msg.sender] = adminList.length;
     }
 
-    modifier onlyOwner() {
-        require(msg.sender == owner, "Not owner");
+    modifier onlyAdmin() {
+        require(isAdmin(msg.sender), "Not admin");
         _;
     }
 
-    /// @notice Governance: update the default refund timeout for new payment contracts
-    function setDefaultRefundTimeout(uint256 _timeout) external onlyOwner {
-        require(_timeout >= 1 days, "Min 1 day timeout");
-        defaultRefundTimeout = _timeout;
+    function isAdmin(address account) public view returns (bool) {
+        return adminIndexPlusOne[account] > 0;
     }
 
-    /// @notice Governance: transfer factory ownership
-    function transferOwnership(address _newOwner) external onlyOwner {
-        require(_newOwner != address(0), "Zero address");
-        owner = _newOwner;
+    function proposeAdminChange(address candidate, bool isAdd) external onlyAdmin returns (uint256) {
+        require(candidate != address(0), "Zero address");
+        require(isAdd != isAdmin(candidate), "Already in target state");
+        
+        uint256 proposalId = nextProposalId++;
+        AdminProposal storage p = proposals[proposalId];
+        p.candidate = candidate;
+        p.isAdd = isAdd;
+        p.approvals = 1;
+        hasApproved[proposalId][msg.sender] = true;
+
+        _executeIfReady(proposalId);
+        return proposalId;
+    }
+
+    function approveAdminChange(uint256 proposalId) external onlyAdmin {
+        AdminProposal storage p = proposals[proposalId];
+        require(!p.executed, "Already executed");
+        require(!hasApproved[proposalId][msg.sender], "Already approved");
+        require(p.isAdd != isAdmin(p.candidate), "State changed");
+
+        hasApproved[proposalId][msg.sender] = true;
+        p.approvals++;
+
+        _executeIfReady(proposalId);
+    }
+
+    function _executeIfReady(uint256 proposalId) internal {
+        AdminProposal storage p = proposals[proposalId];
+        uint256 requiredApprovals = adminList.length == 1 ? 1 : (adminList.length * 70 + 99) / 100;
+        
+        if (p.approvals >= requiredApprovals) {
+            p.executed = true;
+            if (p.isAdd) {
+                adminList.push(p.candidate);
+                adminIndexPlusOne[p.candidate] = adminList.length;
+            } else {
+                require(adminList.length > 1, "Cannot remove last admin");
+                uint256 indexToRemove = adminIndexPlusOne[p.candidate] - 1;
+                address lastAdmin = adminList[adminList.length - 1];
+                
+                adminList[indexToRemove] = lastAdmin;
+                adminIndexPlusOne[lastAdmin] = indexToRemove + 1;
+                
+                adminList.pop();
+                adminIndexPlusOne[p.candidate] = 0;
+            }
+        }
+    }
+
+    /// @notice Governance: update the default refund timeout for new payment contracts
+    function setDefaultRefundTimeout(uint256 _timeout) external onlyAdmin {
+        require(_timeout >= 1 days, "Min 1 day timeout");
+        defaultRefundTimeout = _timeout;
     }
 
     function createPayment(
