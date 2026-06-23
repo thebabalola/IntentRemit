@@ -74,9 +74,10 @@ export default function Navbar() {
             <div className="flex items-center gap-2">
               <button
                 onClick={handleCopy}
-                className="flex items-center gap-2 px-3 py-2 bg-celoyellow hover:bg-celoyellow/90 active:scale-95 transition-all rounded-xl text-[10px] sm:text-xs font-black text-black font-mono select-none shadow-[0_0_20px_rgba(252,255,82,0.2)] cursor-pointer"
+                className="flex items-center gap-2 px-3 py-1.5 bg-celoyellow hover:bg-celoyellow/90 active:scale-95 transition-all rounded-xl text-[10px] sm:text-xs font-black text-black font-mono select-none shadow-[0_0_20px_rgba(252,255,82,0.2)] cursor-pointer"
                 title="Copy wallet address"
               >
+                <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${address}`} alt="Avatar" className="w-5 h-5 rounded-full bg-black/10" />
                 <span>{`${address.slice(0, 4)}...${address.slice(-4)}`}</span>
                 {copied ? (
                   <Check size={12} className="text-black" />
