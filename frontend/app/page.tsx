@@ -446,10 +446,10 @@ export default function Home() {
                             onChange={(e) => setToken(e.target.value as `0x${string}`)}
                             className="bg-white/5 border border-white/10 rounded-xl px-3 text-xs outline-none"
                           >
-                            <option value={CONTRACT_ADDRESSES.CELO}>
+                            <option value={CONTRACT_ADDRESSES.CELO} className="bg-[#14130d] text-white">
                               CELO
                             </option>
-                            <option value={CONTRACT_ADDRESSES.CUSD}>
+                            <option value={CONTRACT_ADDRESSES.CUSD} className="bg-[#14130d] text-white">
                               cUSD
                             </option>
                           </select>
