@@ -82,7 +82,7 @@ export default function HelpDrawer({ isOpen, onClose }: HelpDrawerProps) {
                     <ul className="list-disc pl-5 mt-2 space-y-1">
                       <li><strong>Recipient Gets Now:</strong> The percentage of money the recipient can withdraw and spend the exact second you hit send.</li>
                       <li><strong>To Growth Vault (Locked Amount):</strong> The percentage of money that is held back by the smart contract.</li>
-                      <li><strong>Yield Protocol:</strong> The UI shows a simulated 1-year growth projection (at 4.5% APY) to demonstrate how the locked money could grow while it sits in the vault.</li>
+                      <li><strong>Yield Protocol:</strong> The UI shows a simulated 1-year growth projection (at 4.5% APY) to demonstrate how the locked money could grow while it sits in the vault. Once created, you can activate real yield!</li>
                     </ul>
                   </div>
 
@@ -105,6 +105,7 @@ export default function HelpDrawer({ isOpen, onClose }: HelpDrawerProps) {
                     <p>Once you send it, you can click on the <strong>My Dashboard</strong> tab on the left sidebar.</p>
                     <ul className="list-disc pl-5 mt-2 space-y-1">
                       <li>Here, you will see a list of all the purposeful transfers you've made.</li>
+                      <li><strong>Enable Moola Market Yield:</strong> For locked ERC20 tokens (like cUSD), you will see an option to natively deposit the locked funds into Moola Market to earn real yield while the recipient waits!</li>
                       <li>You can see the live countdown timer for Time-Locked funds.</li>
                       <li>If you are the recipient (or testing with your own alternate wallet), this is the same dashboard where you will see the <strong>Claim Immediate</strong> button and the <strong>Unlock Vault</strong> button (which only becomes clickable once the time has passed or approvals are met).</li>
                     </ul>
