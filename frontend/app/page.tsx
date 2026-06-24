@@ -574,10 +574,10 @@ export default function Home() {
                           </div>
                           <div>
                             <div className="text-[10px] font-black uppercase tracking-widest text-celogold/70">
-                              Yield Protocol (Simulated 4.5% APY)
+                              Moola Market Yield
                             </div>
                             <div className="text-sm font-bold text-celogold">
-                              Simulated 1yr Growth
+                              Available after creation
                             </div>
                           </div>
                         </div>
