@@ -32,5 +32,7 @@ export const CONDITIONAL_PAYMENT_FUNCTIONS = {
   EXECUTE_IMMEDIATE: "executeImmediate",
   EXECUTE_LOCKED: "executeLocked",
   REFUND: "refund",
-  APPROVE_MANUAL: "approveManual"
+  APPROVE_MANUAL: "approveManual",
+  ENABLE_YIELD: "enableYield",
+  IS_YIELD_BEARING: "isYieldBearing"
 } as const;

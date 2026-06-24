@@ -36,6 +36,7 @@ import {
   useRefundPayment,
   useGetPaymentAddress,
   useGetFactoryOwner,
+  useEnableYield,
 } from "@/lib/hooks";
 import { ConditionType } from "@/lib/constants";
 import { CONTRACT_ADDRESSES } from "@/lib/constants/contracts";
@@ -1038,15 +1039,20 @@ function FormInput({
 }
 
 function PaymentItem({ paymentId }: { paymentId: bigint }) {
+  const { address: userAddress } = useAccount();
   const { data: address } = useGetPaymentAddress(paymentId);
   const payment = useConditionalPayment(address as `0x${string}`);
   const executeImmediate = useExecuteImmediate();
   const executeLocked = useExecuteLocked();
   const refund = useRefundPayment();
   const approve = useApprovePayment();
+  const enableYield = useEnableYield();
 
   const [timeLeft, setTimeLeft] = useState<string>("");
   const [progressWidth, setProgressWidth] = useState<string>("0%");
+  const [showYieldConfig, setShowYieldConfig] = useState(false);
+  const [yieldPool, setYieldPool] = useState("0x918146359264C492BD6934071c6Bd31C854EDBc3"); // Moola Market cUSD Pool
+
 
   useEffect(() => {
     if (!payment || payment.conditionType !== 0 || !payment.executeAt) return;
@@ -1263,6 +1269,53 @@ function PaymentItem({ paymentId }: { paymentId: bigint }) {
               <div className="absolute inset-0 bg-white/20 w-1/2 -skew-x-12 animate-[shimmer_2s_infinite]" />
             </motion.div>
           </div>
+        </div>
+      )}
+
+      {/* Yield Config for Sender */}
+      {!payment.lockedExecuted && !payment.refunded && payment.sender?.toLowerCase() === userAddress?.toLowerCase() && payment.token !== CONTRACT_ADDRESSES.CELO && (
+        <div className="mt-4 pt-4 border-t border-white/5">
+          {!payment.isYieldBearing ? (
+            <div className="bg-celogold/5 border border-celogold/10 rounded-xl p-4">
+              <div className="flex justify-between items-center cursor-pointer" onClick={() => setShowYieldConfig(!showYieldConfig)}>
+                <div className="flex items-center gap-2">
+                  <TrendingUp size={16} className="text-celogold" />
+                  <span className="text-sm font-bold text-celogold">Enable Moola Market Yield</span>
+                </div>
+                <div className="text-xs text-celogold/70 font-bold">{showYieldConfig ? "Cancel" : "Setup"}</div>
+              </div>
+              {showYieldConfig && (
+                <div className="mt-4 space-y-3">
+                  <p className="text-xs text-gray-400">Your locked funds are currently sitting idle. Deposit them into Moola Market to earn real yield while locked.</p>
+                  <div className="flex gap-2">
+                    <input 
+                      type="text" 
+                      value={yieldPool}
+                      onChange={(e) => setYieldPool(e.target.value)}
+                      placeholder="Moola Market Pool Address"
+                      className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs outline-none focus:border-celogold/50"
+                    />
+                    <button 
+                      onClick={() => enableYield.enableYield(address as `0x${string}`, yieldPool as `0x${string}`)}
+                      disabled={enableYield.isPending}
+                      className="bg-celogold text-black font-bold px-4 py-2 rounded-lg text-xs hover:bg-celogold/90 transition-all flex items-center justify-center min-w-[80px]"
+                    >
+                      {enableYield.isPending ? <Loader2 size={12} className="animate-spin" /> : "Enable"}
+                    </button>
+                  </div>
+                  <p className="text-[9px] text-celogold/50 uppercase tracking-wider">Recommended: Moola cUSD Pool ({yieldPool})</p>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="bg-green-500/5 border border-green-500/20 rounded-xl p-3 flex items-center gap-3">
+              <div className="p-2 bg-green-500/20 rounded-lg"><Sparkles size={14} className="text-green-500" /></div>
+              <div>
+                <div className="text-xs font-bold text-green-500">Yield Generating</div>
+                <div className="text-[10px] text-gray-400">Locked funds are earning interest in Moola Market.</div>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

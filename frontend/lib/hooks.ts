@@ -131,6 +131,7 @@ export function useConditionalPayment(paymentAddress: `0x${string}` | undefined)
   const { data: executeAt } = useReadContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: CONDITIONAL_PAYMENT_FUNCTIONS.EXECUTE_AT, query: { enabled } })
   const { data: requiredApprovals } = useReadContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: CONDITIONAL_PAYMENT_FUNCTIONS.REQUIRED_APPROVALS, query: { enabled } })
   const { data: canExecute } = useReadContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: CONDITIONAL_PAYMENT_FUNCTIONS.CHECK_CONDITION, query: { enabled } })
+  const { data: isYieldBearing } = useReadContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: CONDITIONAL_PAYMENT_FUNCTIONS.IS_YIELD_BEARING, query: { enabled } })
 
   return {
     sender,
@@ -147,6 +148,7 @@ export function useConditionalPayment(paymentAddress: `0x${string}` | undefined)
     executeAt: executeAt as bigint | undefined,
     requiredApprovals: requiredApprovals as bigint | undefined,
     canExecute: canExecute as boolean | undefined,
+    isYieldBearing: isYieldBearing as boolean | undefined,
     isLoading: enabled && (totalAmount === undefined)
   }
 }
@@ -185,6 +187,15 @@ export function useApprovePayment() {
   }
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
   return { approve, hash, isPending, isConfirming, isSuccess, error }
+}
+
+export function useEnableYield() {
+  const { writeContract, data: hash, isPending, error, reset } = useWriteContract()
+  async function enableYield(paymentAddress: `0x${string}`, yieldPool: `0x${string}`) {
+    writeContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: CONDITIONAL_PAYMENT_FUNCTIONS.ENABLE_YIELD, args: [yieldPool], type: 'legacy' })
+  }
+  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
+  return { enableYield, hash, isPending, isConfirming, isSuccess, error, reset }
 }
 
 export function useGetFactoryOwner() {
