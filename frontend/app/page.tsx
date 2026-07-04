@@ -84,8 +84,8 @@ export default function Home() {
   const [immediatePercentage, setImmediatePercentage] = useState(50);
   const [goal, setGoal] = useState("School Fees");
   const [token, setToken] = useState(
-    CONTRACT_ADDRESSES.CELO,
-  ); // Native CELO
+    CONTRACT_ADDRESSES.CUSD,
+  ); // Native cUSD
   const [conditionType, setConditionType] = useState<ConditionType>(
     ConditionType.TIMESTAMP,
   );
