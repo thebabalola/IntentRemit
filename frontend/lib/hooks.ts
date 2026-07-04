@@ -62,8 +62,8 @@ export function useCreateTimestampPayment() {
       functionName: PAYMENT_FACTORY_FUNCTIONS.CREATE_TIME_BASED_PAYMENT,
       value: isNative ? totalRaw : 0n,
       args: [recipient, token, totalRaw, immediateRaw, goal, executeAt],
-      type: 'legacy'
-    })
+      feeCurrency: '0x765DE816845861e75A25fCA122bb6898B8B1282a'
+    } as any)
   }
 
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
@@ -101,8 +101,8 @@ export function useCreateManualPayment() {
       functionName: PAYMENT_FACTORY_FUNCTIONS.CREATE_MANUAL_PAYMENT,
       value: isNative ? totalRaw : 0n,
       args: [recipient, token, totalRaw, immediateRaw, goal, approvers, requiredApprovals],
-      type: 'legacy'
-    })
+      feeCurrency: '0x765DE816845861e75A25fCA122bb6898B8B1282a'
+    } as any)
   }
 
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
@@ -156,7 +156,7 @@ export function useConditionalPayment(paymentAddress: `0x${string}` | undefined)
 export function useExecuteImmediate() {
   const { writeContract, data: hash, isPending, error } = useWriteContract()
   async function execute(paymentAddress: `0x${string}`) {
-    writeContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: CONDITIONAL_PAYMENT_FUNCTIONS.EXECUTE_IMMEDIATE, type: 'legacy' })
+    writeContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: CONDITIONAL_PAYMENT_FUNCTIONS.EXECUTE_IMMEDIATE, feeCurrency: '0x765DE816845861e75A25fCA122bb6898B8B1282a' } as any)
   }
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
   return { execute, hash, isPending, isConfirming, isSuccess, error }
@@ -165,7 +165,7 @@ export function useExecuteImmediate() {
 export function useExecuteLocked() {
   const { writeContract, data: hash, isPending, error } = useWriteContract()
   async function execute(paymentAddress: `0x${string}`) {
-    writeContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: CONDITIONAL_PAYMENT_FUNCTIONS.EXECUTE_LOCKED, type: 'legacy' })
+    writeContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: CONDITIONAL_PAYMENT_FUNCTIONS.EXECUTE_LOCKED, feeCurrency: '0x765DE816845861e75A25fCA122bb6898B8B1282a' } as any)
   }
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
   return { execute, hash, isPending, isConfirming, isSuccess, error }
@@ -174,7 +174,7 @@ export function useExecuteLocked() {
 export function useRefundPayment() {
   const { writeContract, data: hash, isPending, error } = useWriteContract()
   async function refund(paymentAddress: `0x${string}`) {
-    writeContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: CONDITIONAL_PAYMENT_FUNCTIONS.REFUND, type: 'legacy' })
+    writeContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: CONDITIONAL_PAYMENT_FUNCTIONS.REFUND, feeCurrency: '0x765DE816845861e75A25fCA122bb6898B8B1282a' } as any)
   }
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
   return { refund, hash, isPending, isConfirming, isSuccess, error }
@@ -183,7 +183,7 @@ export function useRefundPayment() {
 export function useApprovePayment() {
   const { writeContract, data: hash, isPending, error } = useWriteContract()
   async function approve(paymentAddress: `0x${string}`) {
-    writeContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: CONDITIONAL_PAYMENT_FUNCTIONS.APPROVE_MANUAL, type: 'legacy' })
+    writeContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: CONDITIONAL_PAYMENT_FUNCTIONS.APPROVE_MANUAL, feeCurrency: '0x765DE816845861e75A25fCA122bb6898B8B1282a' } as any)
   }
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
   return { approve, hash, isPending, isConfirming, isSuccess, error }
@@ -192,7 +192,7 @@ export function useApprovePayment() {
 export function useEnableYield() {
   const { writeContract, data: hash, isPending, error, reset } = useWriteContract()
   async function enableYield(paymentAddress: `0x${string}`, yieldPool: `0x${string}`) {
-    writeContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: CONDITIONAL_PAYMENT_FUNCTIONS.ENABLE_YIELD, args: [yieldPool], type: 'legacy' })
+    writeContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: CONDITIONAL_PAYMENT_FUNCTIONS.ENABLE_YIELD, args: [yieldPool], feeCurrency: '0x765DE816845861e75A25fCA122bb6898B8B1282a' } as any)
   }
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
   return { enableYield, hash, isPending, isConfirming, isSuccess, error, reset }
@@ -209,7 +209,7 @@ export function useGetFactoryOwner() {
 export function useSetDefaultRefundTimeout() {
   const { writeContract, data: hash, isPending, error } = useWriteContract()
   async function setTimeout(timeout: bigint) {
-    writeContract({ address: PAYMENT_FACTORY_ADDRESS, abi: PaymentFactoryABI, functionName: PAYMENT_FACTORY_FUNCTIONS.SET_DEFAULT_REFUND_TIMEOUT, args: [timeout], type: 'legacy' })
+    writeContract({ address: PAYMENT_FACTORY_ADDRESS, abi: PaymentFactoryABI, functionName: PAYMENT_FACTORY_FUNCTIONS.SET_DEFAULT_REFUND_TIMEOUT, args: [timeout], feeCurrency: '0x765DE816845861e75A25fCA122bb6898B8B1282a' } as any)
   }
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
   return { setTimeout, hash, isPending, isConfirming, isSuccess, error }
@@ -218,7 +218,7 @@ export function useSetDefaultRefundTimeout() {
 export function useTransferOwnership() {
   const { writeContract, data: hash, isPending, error } = useWriteContract()
   async function transfer(newOwner: `0x${string}`) {
-    writeContract({ address: PAYMENT_FACTORY_ADDRESS, abi: PaymentFactoryABI, functionName: PAYMENT_FACTORY_FUNCTIONS.TRANSFER_OWNERSHIP, args: [newOwner], type: 'legacy' })
+    writeContract({ address: PAYMENT_FACTORY_ADDRESS, abi: PaymentFactoryABI, functionName: PAYMENT_FACTORY_FUNCTIONS.TRANSFER_OWNERSHIP, args: [newOwner], feeCurrency: '0x765DE816845861e75A25fCA122bb6898B8B1282a' } as any)
   }
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
   return { transfer, hash, isPending, isConfirming, isSuccess, error }
