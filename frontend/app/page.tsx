@@ -84,8 +84,8 @@ export default function Home() {
   const [immediatePercentage, setImmediatePercentage] = useState(50);
   const [goal, setGoal] = useState("School Fees");
   const [token, setToken] = useState(
-    CONTRACT_ADDRESSES.CUSD,
-  ); // Native cUSD
+    CONTRACT_ADDRESSES.USDM,
+  ); // Native USDm
   const [conditionType, setConditionType] = useState<ConditionType>(
     ConditionType.TIMESTAMP,
   );
@@ -121,8 +121,14 @@ export default function Home() {
       return {
         formatted: formatEther(tokenBalance as bigint),
         symbol:
-          token === CONTRACT_ADDRESSES.CUSD
-            ? "cUSD"
+          token === CONTRACT_ADDRESSES.USDM
+            ? "USDm"
+            : token === CONTRACT_ADDRESSES.EURM
+            ? "EURm"
+            : token === CONTRACT_ADDRESSES.USDT
+            ? "USDT"
+            : token === CONTRACT_ADDRESSES.USDC
+            ? "USDC"
             : "TOKEN",
         decimals: 18,
       };
@@ -449,8 +455,17 @@ export default function Home() {
                             <option value={CONTRACT_ADDRESSES.CELO} className="bg-[#14130d] text-white">
                               CELO
                             </option>
-                            <option value={CONTRACT_ADDRESSES.CUSD} className="bg-[#14130d] text-white">
-                              cUSD
+                            <option value={CONTRACT_ADDRESSES.USDM} className="bg-[#14130d] text-white">
+                              USDm
+                            </option>
+                            <option value={CONTRACT_ADDRESSES.EURM} className="bg-[#14130d] text-white">
+                              EURm
+                            </option>
+                            <option value={CONTRACT_ADDRESSES.USDT} className="bg-[#14130d] text-white">
+                              USDT
+                            </option>
+                            <option value={CONTRACT_ADDRESSES.USDC} className="bg-[#14130d] text-white">
+                              USDC
                             </option>
                           </select>
                           <div className="relative flex-1">
@@ -1051,7 +1066,7 @@ function PaymentItem({ paymentId }: { paymentId: bigint }) {
   const [timeLeft, setTimeLeft] = useState<string>("");
   const [progressWidth, setProgressWidth] = useState<string>("0%");
   const [showYieldConfig, setShowYieldConfig] = useState(false);
-  const [yieldPool, setYieldPool] = useState("0x918146359264C492BD6934071c6Bd31C854EDBc3"); // Moola Market cUSD Pool
+  const [yieldPool, setYieldPool] = useState("0x918146359264C492BD6934071c6Bd31C854EDBc3"); // Moola Market USDm Pool
 
 
   useEffect(() => {
@@ -1163,7 +1178,15 @@ function PaymentItem({ paymentId }: { paymentId: bigint }) {
               {payment.totalAmount}{" "}
               {payment.token === CONTRACT_ADDRESSES.CELO
                 ? "CELO"
-                : "cUSD"}
+                : payment.token === CONTRACT_ADDRESSES.USDM
+                ? "USDm"
+                : payment.token === CONTRACT_ADDRESSES.EURM
+                ? "EURm"
+                : payment.token === CONTRACT_ADDRESSES.USDT
+                ? "USDT"
+                : payment.token === CONTRACT_ADDRESSES.USDC
+                ? "USDC"
+                : "TOKEN"}
               <ArrowRight size={16} className="text-gray-600" />
               {payment.recipient?.slice(0, 6)}...{payment.recipient?.slice(-4)}
             </h3>
@@ -1303,7 +1326,7 @@ function PaymentItem({ paymentId }: { paymentId: bigint }) {
                       {enableYield.isPending ? <Loader2 size={12} className="animate-spin" /> : "Enable"}
                     </button>
                   </div>
-                  <p className="text-[9px] text-celogold/50 uppercase tracking-wider">Recommended: Moola cUSD Pool ({yieldPool})</p>
+                  <p className="text-[9px] text-celogold/50 uppercase tracking-wider">Recommended: Moola USDm Pool ({yieldPool})</p>
                 </div>
               )}
             </div>
