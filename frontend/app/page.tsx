@@ -277,7 +277,7 @@ export default function Home() {
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-celogold/10 blur-[120px] rounded-full animate-pulse delay-700" />
         {/* 3D Blurred Background */}
         <div className="absolute inset-0 opacity-40">
-          <img src="/assets/bg_geometric.png" alt="3D Background" className="w-full h-full object-cover blur-[8px]" />
+          <img src="/assets/bg_connectivity.png" alt="3D Background" className="w-full h-full object-cover blur-[8px]" />
         </div>
       </div>
 

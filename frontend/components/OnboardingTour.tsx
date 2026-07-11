@@ -108,6 +108,10 @@ export default function OnboardingTour() {
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             className="relative w-full max-w-md bg-[#0b0a05] border border-celoyellow/20 rounded-[32px] overflow-hidden shadow-[0_0_50px_rgba(252,255,82,0.1)]"
           >
+            {/* 3D Geometric Background inside Modal */}
+            <div className="absolute inset-0 opacity-20 pointer-events-none">
+              <img src="/assets/bg_geometric.png" alt="Geometric Background" className="w-full h-full object-cover blur-[4px]" />
+            </div>
             {/* Progress Bar */}
             <div className="absolute top-0 left-0 right-0 h-1 bg-white/5">
               <motion.div 
