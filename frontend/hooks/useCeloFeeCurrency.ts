@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useBalance, useAccount } from 'wagmi'
+import { useAccount, useReadContract } from 'wagmi'
+import { erc20Abi } from 'viem'
 
 export const CELO_FEE_CURRENCIES = {
   USDm: '0x765DE816845861e75A25fCA122bb6898B8B1282a' as `0x${string}`,
@@ -27,16 +28,18 @@ export function useCeloFeeCurrency() {
   const [autoResolved, setAutoResolved] = useState(false)
 
   // Check USDm balance
-  const { data: usdmBalance } = useBalance({
-    address,
-    token: CELO_FEE_CURRENCIES.USDm,
+  const { data: usdmBalance } = useReadContract({
+    address: CELO_FEE_CURRENCIES.USDm,
+    abi: erc20Abi,
+    functionName: 'balanceOf',
+    args: address ? [address] : undefined,
     query: { enabled: !!address },
   })
 
   // Auto-resolve: if user has no USDm, fall back to CELO
   useEffect(() => {
     if (usdmBalance !== undefined && !autoResolved) {
-      if (usdmBalance.value === 0n) {
+      if (usdmBalance === 0n) {
         setSelectedCurrency('CELO')
       } else {
         setSelectedCurrency('USDm')
