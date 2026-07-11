@@ -271,10 +271,14 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#050502] via-[#0b0a05] to-[#020201] text-white selection:bg-celoyellow/30 overflow-x-hidden">
       <OnboardingTour />
-      {/* Animated Background Gradients */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+      {/* Animated Background Gradients & 3D BG */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-celoyellow/10 blur-[120px] rounded-full animate-pulse" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-celogold/10 blur-[120px] rounded-full animate-pulse delay-700" />
+        {/* 3D Blurred Background */}
+        <div className="absolute inset-0 opacity-40">
+          <img src="/assets/bg_geometric.png" alt="3D Background" className="w-full h-full object-cover blur-[8px]" />
+        </div>
       </div>
 
       <div className="max-w-6xl mx-auto px-6 pt-32 pb-20 relative z-10">
@@ -287,11 +291,12 @@ export default function Home() {
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-celoyellow/10 border border-celoyellow/20 text-celoyellow text-xs font-bold tracking-widest uppercase mb-6">
             <ShieldCheck size={14} /> Programmable Purpose
           </div>
-          <h1 className="text-6xl md:text-7xl font-black mb-6 tracking-tight">
+          <h1 className="text-6xl md:text-7xl font-black mb-6 tracking-tight flex items-center justify-center gap-4">
             Intent{" "}
             <span className="bg-gradient-to-r from-celoyellow to-celogold bg-clip-text text-transparent italic">
               Remit
             </span>
+            <img src="/assets/avatar_geometric_2.png" alt="3D Avatar" className="w-20 h-20 md:w-24 md:h-24 object-contain animate-bounce drop-shadow-[0_0_15px_rgba(252,255,82,0.4)]" />
           </h1>
           <p className="text-gray-400 text-xl max-w-2xl mx-auto font-medium">
             Send money with purpose. Define the goal, split the payout, and
