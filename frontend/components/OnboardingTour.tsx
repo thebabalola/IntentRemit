@@ -108,12 +108,13 @@ export default function OnboardingTour() {
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             className="relative w-full max-w-md bg-[#0b0a05] border border-celoyellow/20 rounded-[32px] overflow-hidden shadow-[0_0_50px_rgba(252,255,82,0.1)]"
           >
-            {/* 3D Geometric Background inside Modal */}
-            <div className="absolute inset-0 opacity-20 pointer-events-none">
-              <img src="/assets/bg_geometric.png" alt="Geometric Background" className="w-full h-full object-cover blur-[4px]" />
+            {/* 3D Geometric Background inside Modal with Dark Frost Overlay */}
+            <div className="absolute inset-0 pointer-events-none z-0">
+              <img src="/assets/bg_geometric.png" alt="Geometric Background" className="absolute inset-0 w-full h-full object-cover opacity-20 blur-[6px]" />
+              <div className="absolute inset-0 bg-gray-900/40 backdrop-blur-[2px]" />
             </div>
             {/* Progress Bar */}
-            <div className="absolute top-0 left-0 right-0 h-1 bg-white/5">
+            <div className="absolute top-0 left-0 right-0 h-1 bg-white/5 z-10">
               <motion.div 
                 initial={{ width: 0 }}
                 animate={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
@@ -123,12 +124,12 @@ export default function OnboardingTour() {
 
             <button 
               onClick={closeTour}
-              className="absolute top-6 right-6 p-2 text-gray-500 hover:text-white transition-colors"
+              className="absolute top-6 right-6 p-2 text-gray-500 hover:text-white transition-colors z-10"
             >
               <X size={20} />
             </button>
 
-            <div className="p-10 pt-14 text-center">
+            <div className="p-10 pt-14 text-center relative z-10">
               <motion.div 
                 key={currentStep}
                 initial={{ opacity: 0, x: 20 }}
