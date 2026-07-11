@@ -586,9 +586,14 @@ export default function Home() {
                       {/* Growth Vault Visualization */}
                       <div
                         id="growth-vault"
-                        className="mt-4 p-4 bg-celogold/5 border border-celogold/10 rounded-xl flex items-center justify-between"
+                        className="mt-4 p-4 bg-celogold/5 border border-celogold/10 rounded-xl flex items-center justify-between relative overflow-hidden group"
                       >
-                        <div className="flex items-center gap-3">
+                        {/* 3D Yield Graph Icon Overlay */}
+                        <div className="absolute -right-4 -bottom-6 opacity-40 group-hover:opacity-60 transition-opacity duration-300">
+                           <img src="/assets/yield_graph.png" alt="3D Yield Growth" className="w-32 h-32 object-contain" />
+                        </div>
+                        
+                        <div className="flex items-center gap-3 relative z-10">
                           <div className="p-2 bg-celogold/20 rounded-lg">
                             <TrendingUp size={16} className="text-celogold" />
                           </div>
@@ -601,7 +606,7 @@ export default function Home() {
                             </div>
                           </div>
                         </div>
-                        <div className="text-right">
+                        <div className="text-right relative z-10">
                           <div className="text-xl font-black text-celogold">
                             ~{simulatedGrowth}
                           </div>
@@ -631,7 +636,7 @@ export default function Home() {
                         <ConditionCard
                           selected={conditionType === ConditionType.MANUAL}
                           onClick={() => setConditionType(ConditionType.MANUAL)}
-                          icon={<UserCheck size={20} />}
+                          icon={<img src="/assets/governance.png" alt="Governance" className="w-6 h-6 object-contain" />}
                           title="Manual Approval"
                           desc="Multi-sig protection"
                         />
