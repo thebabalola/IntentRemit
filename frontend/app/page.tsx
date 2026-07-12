@@ -183,6 +183,13 @@ export default function Home() {
           desc: "AI Suggests: 70% to Growth Vault for capital expansion.",
         };
       default:
+        if (goal.trim() !== "") {
+          return {
+            immediate: 50,
+            locked: 50,
+            desc: "AI Suggests: Balanced 50/50 split for custom remittance goals.",
+          };
+        }
         return null;
     }
   }, [goal]);
@@ -360,38 +367,25 @@ export default function Home() {
                   <form onSubmit={handleSimulate} className="space-y-8">
                     {/* Goal Selection */}
                     <div id="goal-selection" className="space-y-4">
-                      <label className="text-xs font-black uppercase tracking-widest text-gray-500 ml-1">
-                        Select Remittance Goal
-                      </label>
+                      <FormInput
+                        label="Remittance Goal"
+                        placeholder="e.g. School Fees, Medical, Groceries, Savings..."
+                        value={goal}
+                        onChange={setGoal}
+                        icon={<ChevronRight size={16} className="text-gray-600" />}
+                      />
                       
-                      {/* Mobile Select Dropdown */}
-                      <div className="md:hidden">
-                        <select
-                          value={goal}
-                          onChange={(e) => setGoal(e.target.value)}
-                          className="w-full bg-[#14130d] border border-white/10 rounded-xl px-4 py-3.5 text-sm font-bold outline-none text-white focus:border-celoyellow/50 transition-all"
-                        >
-                          <option value="" disabled>Select Goal...</option>
-                          {["School Fees", "Medical", "Rent", "Business"].map((g) => (
-                            <option key={g} value={g} className="bg-[#14130d] text-white">
-                              {g}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      {/* Desktop Grid Selector */}
-                      <div className="hidden md:grid grid-cols-4 gap-3">
+                      <div className="flex flex-wrap gap-2 pt-1">
                         {["School Fees", "Medical", "Rent", "Business"].map(
                           (g) => (
                             <button
                               key={g}
                               type="button"
                               onClick={() => setGoal(g)}
-                              className={`p-4 rounded-xl border text-sm font-bold transition-all ${
+                              className={`px-4 py-2 rounded-xl border text-xs font-bold transition-all ${
                                 goal === g
                                   ? "bg-celoyellow/20 border-celoyellow/50 text-celoyellow"
-                                  : "bg-white/5 border-white/5 text-gray-500 hover:border-white/20"
+                                  : "bg-white/5 border-white/5 text-gray-400 hover:text-white hover:border-white/20"
                               }`}
                             >
                               {g}
