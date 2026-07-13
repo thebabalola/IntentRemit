@@ -61,7 +61,7 @@ export default function HelpDrawer({ isOpen, onClose }: HelpDrawerProps) {
                     <h3 className="text-white font-bold text-base mb-1">2. Select Remittance Goal</h3>
                     <p>You start by selecting the purpose of the money you are sending.</p>
                     <ul className="list-disc pl-5 mt-2 space-y-1">
-                      <li><strong>Options:</strong> <code>School Fees</code>, <code>Medical</code>, <code>Rent</code>, or <code>Business</code>.</li>
+                      <li><strong>Options:</strong> You can select from preset goals like <code>School Fees</code>, <code>Medical</code>, <code>Rent</code>, or <code>Business</code>, or you can manually type your own specific intent directly into the input field!</li>
                       <li><strong>AI Suggestion:</strong> When you click a goal (e.g., <em>School Fees</em>), a small AI banner appears suggesting the best way to split the money. For School Fees, it suggests locking 90% for future tuition and keeping 10% immediate.</li>
                       <li><strong>Apply Split:</strong> Clicking this button automatically moves your slider to match the AI's advice.</li>
                     </ul>

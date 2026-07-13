@@ -82,7 +82,7 @@ export default function Home() {
   const [recipient, setRecipient] = useState("");
   const [totalAmount, setTotalAmount] = useState("");
   const [immediatePercentage, setImmediatePercentage] = useState(50);
-  const [goal, setGoal] = useState("School Fees");
+  const [goal, setGoal] = useState("");
   const [token, setToken] = useState(
     CONTRACT_ADDRESSES.USDM,
   ); // Native USDm
@@ -282,10 +282,11 @@ export default function Home() {
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-celoyellow/10 blur-[120px] rounded-full animate-pulse" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-celogold/10 blur-[120px] rounded-full animate-pulse delay-700" />
-        {/* 3D Blurred Background */}
+        {/* 3D Frosted Background */}
         <div className="absolute inset-0 opacity-40">
-          <img src="/assets/bg_connectivity.png" alt="3D Background" className="w-full h-full object-cover blur-[8px]" />
+          <img src="/assets/bg_connectivity.png" alt="3D Background" className="w-full h-full object-cover" />
         </div>
+        <div className="absolute inset-0 backdrop-blur-xl bg-black/40" />
       </div>
 
       <div className="max-w-6xl mx-auto px-6 pt-32 pb-20 relative z-10">
