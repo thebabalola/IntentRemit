@@ -1,212 +1,36 @@
-# IntentRemit 🚀
+# Product Requirements Document: IntentRemit
 
-### Programmable Remittance with Purpose on Celo
+## 1. Executive Summary
+IntentRemit is a next-generation remittance infrastructure engineered on the Celo blockchain. It transitions the paradigm of cross-border payments from immediate, untracked consumption to structured, purpose-driven capital allocation. By embedding programmable conditions into transactions, senders can ensure their funds are utilized for specific objectives, fostering long-term financial stability for recipients in emerging markets.
 
----
+## 2. Market Opportunity
+Current global remittance flows suffer from high friction, exorbitant fees, and a lack of sender oversight. While traditional cryptocurrencies solve the transmission speed and cost issues, they fail to address the behavioral economics of the transfer. IntentRemit bridges this gap by offering a trustless, smart-contract-based escrow system that enforces sender intent without requiring intermediaries.
 
-Project Name: IntentRemitOne-liner:
-IntentRemit turns diaspora remittances on Celo from instant consumption into programmable financial growth by letting senders attach goals and conditions, while delivering intelligent allocation suggestions and EVM-enforced Growth Vaults.
-Why Celo? (Important for application)
-Celo's native strengths — mobile-first architecture, sub-penny fees, instant settlement, cUSD support, and Solidity smart contracts — make programmable, goal-driven money possible in a way no other chain matches for emerging markets like West Africa.
+## 3. Core Capabilities
+### 3.1 Goal-Oriented Capital Routing
+Senders designate a specific purpose for the transfer (e.g., Tuition, Housing, Enterprise Capital). This categorization drives the subsequent conditional logic applied to the funds.
 
----
+### 3.2 Programmatic Disbursement
+Funds are partitioned based on sender-defined parameters:
+*   **Immediate Liquidity:** A percentage made instantly available to the recipient.
+*   **Structured Vesting (Growth Vault):** The remaining balance is secured in a time-locked smart contract, releasing only upon maturity or specific cryptographic approvals.
 
-## 🧠 Overview
+### 3.3 CIP-64 Fee Abstraction
+To ensure a frictionless user experience, all network gas fees are abstracted using Celo's CIP-64 standard, allowing transaction costs to be settled in stablecoins (e.g., USDm) rather than native network tokens.
 
-**IntentRemit** is a programmable remittance layer built on Celo that allows diaspora senders to attach **goals, conditions, and intelligent allocation** to transfers — helping recipients turn money into structured financial growth instead of immediate consumption.
+### 3.4 Multi-Asset Compatibility
+The protocol natively supports a diverse basket of assets, including native CELO and major stablecoins (USDm, EURm, USDC, USDT), ensuring flexibility for international senders.
 
----
+## 4. Technical Architecture
+The system is built on a highly modular architecture:
+*   **Smart Contracts:** Developed in Solidity, utilizing a Factory pattern (`PaymentFactory.sol`) to deploy isolated, secure `ConditionalPayment` instances for every transaction.
+*   **Frontend Interface:** A highly responsive, mobile-optimized Web3 application built with Next.js, integrating the Wagmi/Viem stack for robust blockchain communication.
+*   **Wallet Integration:** Seamless compatibility with MiniPay and Valora, ensuring accessibility for the target demographic.
 
-## ❗ Problem
+## 5. Deployment Information
+The core infrastructure is fully operational on the Celo Mainnet:
+*   **PaymentFactory:** `0xBC78E2a916514CBE944074295070C63db8d375BD`
+*   **ConditionOracle:** `0x2CdCbaDf713DC4eF0e45c26bD484d1ea154c698a`
 
-Remittances into regions like West Africa exceed **$20B+ annually**, yet:
-
-- 💸 High fees (8%–20%) and slow settlement (3–5 days)
-- 💳 Existing crypto rails solve _speed_, but not _financial behavior_
-- 📉 80–90% of remittances go into immediate consumption
-- 🚫 No structured way to enforce savings, goals, or financial discipline
-
-**Result:**  
-Money flows in — but long-term financial progress remains stagnant.
-
----
-
-## 💡 Solution
-
-IntentRemit introduces **programmable financial intent** into remittances:
-
-- 📨 Send money with a **goal** (e.g., school fees, rent, business capital)
-- ⚙️ Define **conditional splits** (e.g., 60% now, 40% later)
-- 🧠 Get **AI-powered allocation suggestions**
-- 🔒 Lock funds into a **Growth Vault** (time-locked smart contract)
-
----
-
-## 🎯 Core MVP Features (5-Day Build Scope)
-
-### 1. ⚡ Instant Celo Transfer
-
-- Connect wallet (MiniPay / Valora / MetaMask)
-- Send **cUSD or CELO** instantly to recipient
-
----
-
-### 2. 🎯 Goal-Based Remittance
-
-- Sender selects:
-  - School Fees
-  - Rent
-  - Business Capital
-  - Custom goal
-- Optional message/note
-
----
-
-### 3. 🔐 Conditional Split (Solidity Smart Contract)
-
-- Sender defines rules:
-  - “60% available immediately”
-  - “40% locked until [date]”
-- Smart contract enforces release conditions
-
----
-
-### 4. 🧠 AI Allocation Suggestion (Lightweight)
-
-- System suggests optimal split:
-
-  > “For school fees, we recommend 55% now, 45% locked.”
-
-- Based on:
-  - Goal type
-  - Region heuristics
-  - Simple rule-based logic (MVP)
-
----
-
-### 5. 📈 Growth Vault
-
-- Locked funds go into a **Solidity time-lock contract**
-- Displays:
-  - Locked amount
-  - Unlock date
-  - Simulated growth
-
-> ⚠️ MVP Note: Yield is simulated  
-> Production path: Celo liquidity pools / tokenized assets
-
----
-
-## 🏗️ Technical Architecture
-
-### 🔗 Blockchain Layer
-
-- **Solidity Smart Contracts**
-  - Time-lock / vesting logic
-  - Conditional release rules
-- **Celo Network**
-  - Fast, low-cost payments
-  - cUSD/CELO transfers
-
----
-
-### 🧠 AI Layer
-
-- Rule-based engine (MVP)
-- Context-aware suggestions
-- Future:
-  - Behavioral learning
-  - Personal financial optimization
-
----
-
-### 🖥️ Frontend
-
-- Next.js (React)
-- TypeScript
-- Tailwind CSS
-- Mobile-first (PWA / MiniPay)
-
----
-
-### 🔌 Wallet Integration
-
-- MiniPay / Valora
-- Wagmi / Viem / Celo SDK
-
----
-
-### ⚙️ Backend (Minimal)
-
-- Node.js (optional)
-- Can be mostly client-side for MVP speed
-
----
-
-## 🎥 Demo Flow (2-Minute Pitch)
-
-1. Sender connects wallet
-2. Enters recipient address
-3. Selects goal (e.g., school fees)
-4. System suggests allocation (AI)
-5. Sender confirms split (e.g., 60/40)
-6. Sends funds
-7. Recipient receives instantly
-8. Sees:
-   - Available funds
-   - Locked funds in vault
-9. Vault shows growth over time
-
----
-
-## 🚀 Why This Matters
-
-- 💡 Moves remittances from **consumption → structured growth**
-- ⚡ Uses Celo’s strengths (speed, low fees, asset support, mobile-first)
-- 🔐 Unlocks **programmable money behavior** via Solidity
-- 🌍 High impact for emerging markets
-- ❤️ Emotional + practical value (family, education, survival → growth)
-
----
-
-## 🧩 Future Expansion (Post-MVP)
-
-- Real off-ramp (mobile money / bank integration)
-- Advanced AI financial assistant
-- Multi-user family dashboards
-- Milestone verification (e.g., receipt upload)
-- Yield integration (DeFi / tokenized assets)
-- Cross-border payroll & merchant tools
-
----
-
-## 🏁 Conclusion
-
-IntentRemit is not just a remittance app.
-
-It is a **financial behavior layer** on top of money —  
-turning every transfer into a step toward stability, growth, and long-term wealth.
-
----
-
-## 🔖 Name Alternatives
-
-- CeloIntent
-- SmartRemit
-- PurposeRemit
-- XIntent
-- CeloFlow
-
----
-
-### Phase 3
-
-- SDK for developers
-- API integrations
-- Cross-app triggers
-
----
-
-## 🎯 Positioning
-
-A mobile-first payment miniapp that transforms user intent into automated financial execution.
+## 6. Strategic Roadmap
+Subsequent iterations will focus on expanding the Oracle integrations to include real-world data verification (e.g., academic enrollment confirmation) and deeper integration with localized off-ramp providers.
