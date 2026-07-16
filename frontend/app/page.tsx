@@ -289,7 +289,7 @@ export default function Home() {
         <div className="absolute inset-0 backdrop-blur-xl bg-black/40" />
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 pt-32 pb-20 relative z-10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-16 sm:pb-20 relative z-10">
         {/* Hero Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -299,14 +299,14 @@ export default function Home() {
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-celoyellow/10 border border-celoyellow/20 text-celoyellow text-xs font-bold tracking-widest uppercase mb-6">
             <ShieldCheck size={14} /> Programmable Purpose
           </div>
-          <h1 className="text-6xl md:text-7xl font-black mb-6 tracking-tight flex items-center justify-center gap-4">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-black mb-4 sm:mb-6 tracking-tight flex items-center justify-center gap-2 sm:gap-4">
             Intent{" "}
             <span className="bg-gradient-to-r from-celoyellow to-celogold bg-clip-text text-transparent italic">
               Remit
             </span>
-            <img src="/assets/avatar_geometric_2.png" alt="3D Avatar" className="w-20 h-20 md:w-24 md:h-24 object-contain animate-bounce drop-shadow-[0_0_15px_rgba(252,255,82,0.4)]" />
+            <img src="/assets/avatar_geometric_2.png" alt="3D Avatar" className="w-14 h-14 sm:w-20 sm:h-20 md:w-24 md:h-24 object-contain animate-bounce drop-shadow-[0_0_15px_rgba(252,255,82,0.4)]" />
           </h1>
-          <p className="text-gray-400 text-xl max-w-2xl mx-auto font-medium">
+          <p className="text-gray-400 text-base sm:text-lg md:text-xl max-w-2xl mx-auto font-medium px-2">
             Send money with purpose. Define the goal, split the payout, and
             ensure your remittance builds long-term growth.
           </p>
@@ -351,7 +351,7 @@ export default function Home() {
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
-                  className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-3xl p-5 md:p-8 shadow-2xl"
+                  className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-8 shadow-2xl"
                 >
                   <div className="flex items-center justify-between mb-8">
                     <div>
@@ -522,14 +522,14 @@ export default function Home() {
                     {/* Split Slider */}
                     <div
                       id="split-slider"
-                      className="p-4 sm:p-6 bg-white/[0.02] border border-white/5 rounded-2xl space-y-6"
+                      className="p-3 sm:p-4 md:p-6 bg-white/[0.02] border border-white/5 rounded-2xl space-y-6"
                     >
                       <div className="flex justify-between items-end">
                         <div>
                           <label className="text-[10px] font-black uppercase tracking-widest text-gray-500">
                             Immediate vs. Locked Split
                           </label>
-                          <div className="text-2xl font-black text-celoyellow mt-1">
+                          <div className="text-xl sm:text-2xl font-black text-celoyellow mt-1">
                             {immediatePercentage}% / {100 - immediatePercentage}
                             %
                           </div>
@@ -538,7 +538,7 @@ export default function Home() {
                           <div className="text-[10px] font-black uppercase text-gray-500">
                             Locked Amount
                           </div>
-                          <div className="text-xl font-bold text-celogold">
+                          <div className="text-lg sm:text-xl font-bold text-celogold">
                             {Number(
                               (
                                 parseFloat(totalAmount || "0") -
@@ -581,7 +581,7 @@ export default function Home() {
                       {/* Growth Vault Visualization */}
                       <div
                         id="growth-vault"
-                        className="mt-4 p-4 bg-celogold/5 border border-celogold/10 rounded-xl flex items-center justify-between relative overflow-hidden group"
+                        className="mt-4 p-3 sm:p-4 bg-celogold/5 border border-celogold/10 rounded-xl flex items-center justify-between relative overflow-hidden group"
                       >
                         {/* 3D Yield Graph Icon Overlay */}
                         <div className="absolute -right-4 -bottom-6 opacity-40 group-hover:opacity-60 transition-opacity duration-300">
@@ -618,7 +618,7 @@ export default function Home() {
                       <label className="text-xs font-black uppercase tracking-widest text-gray-500 ml-1">
                         Lock Conditions
                       </label>
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <ConditionCard
                           selected={conditionType === ConditionType.TIMESTAMP}
                           onClick={() =>
@@ -683,7 +683,7 @@ export default function Home() {
                     <button
                       type="submit"
                       disabled={!isConnected || isInsufficientBalance}
-                      className="w-full h-14 bg-gradient-to-r from-celoyellow to-celogold hover:scale-[1.02] active:scale-[0.98] transition-all rounded-2xl font-bold text-black flex items-center justify-center gap-3 disabled:opacity-50 disabled:grayscale"
+                      className="w-full h-12 sm:h-14 text-sm sm:text-base bg-gradient-to-r from-celoyellow to-celogold hover:scale-[1.02] active:scale-[0.98] transition-all rounded-xl sm:rounded-2xl font-bold text-black flex items-center justify-center gap-2 sm:gap-3 disabled:opacity-50 disabled:grayscale"
                     >
                       <ArrowRight size={20} />
                       {isConnected
