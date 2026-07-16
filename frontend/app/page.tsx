@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { useAccount, useBalance, useReadContract } from "wagmi";
+import { useAccount, useBalance, useReadContract, useWriteContract, usePublicClient } from "wagmi";
 import { useAppKit } from "@reown/appkit/react";
 import { parseEther, formatEther, erc20Abi } from "viem";
 import { motion, AnimatePresence } from "framer-motion";
@@ -38,7 +38,7 @@ import {
   useGetFactoryOwner,
   useEnableYield,
 } from "@/lib/hooks";
-import { ConditionType } from "@/lib/constants";
+import { ConditionType, PAYMENT_FACTORY_ADDRESS } from "@/lib/constants";
 import { CONTRACT_ADDRESSES } from "@/lib/constants/contracts";
 import { useCeloPrice } from "@/hooks/useCeloPrice";
 
@@ -47,6 +47,8 @@ export default function Home() {
   const { open } = useAppKit();
   const celoUsdRate = useCeloPrice();
   const { address, isConnected } = useAccount();
+  const { writeContractAsync } = useWriteContract();
+  const publicClient = usePublicClient();
   const [activeTab, setActiveTab] = useState<"create" | "status" | "admin">("create");
   const [copied, setCopied] = useState(false);
   const [status, setStatus] = useState<{
@@ -236,6 +238,19 @@ export default function Home() {
     setStatus(null);
 
     try {
+      if (!isNative && publicClient) {
+        setStatus({ type: "success", message: "Requesting token approval..." });
+        const hash = await writeContractAsync({
+          address: token as `0x${string}`,
+          abi: erc20Abi,
+          functionName: 'approve',
+          args: [PAYMENT_FACTORY_ADDRESS, parseEther(totalAmount)]
+        });
+        setStatus({ type: "success", message: "Waiting for approval confirmation..." });
+        await publicClient.waitForTransactionReceipt({ hash });
+        setStatus({ type: "success", message: "Approval confirmed! Creating intent..." });
+      }
+
       if (conditionType === ConditionType.TIMESTAMP) {
         if (!executeAt) throw new Error("Execute date is required");
         const timestamp = BigInt(
