@@ -41,11 +41,13 @@ import {
 import { ConditionType, PAYMENT_FACTORY_ADDRESS } from "@/lib/constants";
 import { CONTRACT_ADDRESSES } from "@/lib/constants/contracts";
 import { useCeloPrice } from "@/hooks/useCeloPrice";
+import { useCeloFeeCurrency } from "@/hooks/useCeloFeeCurrency";
 
 export default function Home() {
   // Main entry point for IntentRemit - Diaspora-focused programmable remittances
   const { open } = useAppKit();
   const celoUsdRate = useCeloPrice();
+  const { feeCurrency } = useCeloFeeCurrency();
   const { address, isConnected } = useAccount();
   const { writeContractAsync } = useWriteContract();
   const publicClient = usePublicClient();
@@ -244,10 +246,14 @@ export default function Home() {
           address: token as `0x${string}`,
           abi: erc20Abi,
           functionName: 'approve',
-          args: [PAYMENT_FACTORY_ADDRESS, parseEther(totalAmount)]
-        });
+          args: [PAYMENT_FACTORY_ADDRESS, parseEther(totalAmount)],
+          ...(feeCurrency ? { feeCurrency } : {})
+        } as any);
         setStatus({ type: "success", message: "Waiting for approval confirmation..." });
-        await publicClient.waitForTransactionReceipt({ hash });
+        const receipt = await publicClient.waitForTransactionReceipt({ hash });
+        if (receipt.status !== 'success') {
+          throw new Error("Approval transaction reverted on-chain");
+        }
         setStatus({ type: "success", message: "Approval confirmed! Creating intent..." });
       }
 
@@ -263,6 +269,7 @@ export default function Home() {
           immediateAmount,
           goal,
           executeAt: timestamp,
+          feeCurrencyAddr: feeCurrency as `0x${string}` | undefined,
         });
       } else if (conditionType === ConditionType.MANUAL) {
         if (!approvers) throw new Error("Approvers are required");
@@ -278,6 +285,7 @@ export default function Home() {
           goal,
           approvers: approverList,
           requiredApprovals: BigInt(requiredApprovals || 1),
+          feeCurrencyAddr: feeCurrency as `0x${string}` | undefined,
         });
       }
       setStatus({ type: "success", message: "Remittance intent published!" });
