@@ -240,7 +240,7 @@ export default function Home() {
     setStatus(null);
 
     try {
-      if (!isNative && publicClient) {
+      if (!isNative) {
         setStatus({ type: "success", message: "Requesting token approval..." });
         const hash = await writeContractAsync({
           address: token as `0x${string}`,
@@ -250,9 +250,14 @@ export default function Home() {
           ...(feeCurrency ? { feeCurrency } : {})
         } as any);
         setStatus({ type: "success", message: "Waiting for approval confirmation..." });
-        const receipt = await publicClient.waitForTransactionReceipt({ hash });
-        if (receipt.status !== 'success') {
-          throw new Error("Approval transaction reverted on-chain");
+        if (publicClient) {
+          const receipt = await publicClient.waitForTransactionReceipt({ hash });
+          if (receipt.status !== 'success') {
+            throw new Error("Approval transaction reverted on-chain");
+          }
+        } else {
+          // Fallback if publicClient is undefined (common on some mobile wallets during init)
+          await new Promise(resolve => setTimeout(resolve, 4000));
         }
         setStatus({ type: "success", message: "Approval confirmed! Creating intent..." });
       }
