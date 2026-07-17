@@ -324,9 +324,7 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-celoyellow/10 border border-celoyellow/20 text-celoyellow text-xs font-bold tracking-widest uppercase mb-6">
-            <ShieldCheck size={14} /> Programmable Purpose
-          </div>
+
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-black mb-4 sm:mb-6 tracking-tight flex items-center justify-center gap-2 sm:gap-4">
             Intent{" "}
             <span className="bg-gradient-to-r from-celoyellow to-celogold bg-clip-text text-transparent italic">
