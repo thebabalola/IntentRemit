@@ -3,6 +3,7 @@
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
 import { parseUnits, formatUnits, parseEther, formatEther } from 'viem'
 import { PAYMENT_FACTORY_ADDRESS } from './constants'
+import { CONTRACT_ADDRESSES } from './constants/contracts'
 import { PAYMENT_FACTORY_FUNCTIONS, CONDITIONAL_PAYMENT_FUNCTIONS } from './constants/contracts'
 import { PaymentFactoryABI, ConditionalPaymentABI } from './contracts'
 
@@ -55,8 +56,10 @@ export function useCreateTimestampPayment() {
     feeCurrencyAddr?: `0x${string}`
   }) {
     const isNative = token === '0x0000000000000000000000000000000000000000'
-    const totalRaw = parseEther(totalAmount)
-    const immediateRaw = parseEther(immediateAmount)
+    const isStable = token === CONTRACT_ADDRESSES.USDT || token === CONTRACT_ADDRESSES.USDC;
+    const decimals = isStable ? 6 : 18;
+    const totalRaw = parseUnits(totalAmount, decimals)
+    const immediateRaw = parseUnits(immediateAmount, decimals)
 
     writeContract({
       address: PAYMENT_FACTORY_ADDRESS,
@@ -96,8 +99,10 @@ export function useCreateManualPayment() {
     feeCurrencyAddr?: `0x${string}`
   }) {
     const isNative = token === '0x0000000000000000000000000000000000000000'
-    const totalRaw = parseEther(totalAmount)
-    const immediateRaw = parseEther(immediateAmount)
+    const isStable = token === CONTRACT_ADDRESSES.USDT || token === CONTRACT_ADDRESSES.USDC;
+    const decimals = isStable ? 6 : 18;
+    const totalRaw = parseUnits(totalAmount, decimals)
+    const immediateRaw = parseUnits(immediateAmount, decimals)
 
     writeContract({
       address: PAYMENT_FACTORY_ADDRESS,
@@ -137,13 +142,16 @@ export function useConditionalPayment(paymentAddress: `0x${string}` | undefined)
   const { data: canExecute } = useReadContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: CONDITIONAL_PAYMENT_FUNCTIONS.CHECK_CONDITION, query: { enabled } })
   const { data: isYieldBearing } = useReadContract({ address: paymentAddress, abi: ConditionalPaymentABI, functionName: CONDITIONAL_PAYMENT_FUNCTIONS.IS_YIELD_BEARING, query: { enabled } })
 
+  const isStable = token === CONTRACT_ADDRESSES.USDT || token === CONTRACT_ADDRESSES.USDC;
+  const decimals = isStable ? 6 : 18;
+
   return {
     sender,
     recipient,
     token,
-    totalAmount: totalAmount ? formatEther(totalAmount as bigint) : undefined,
-    immediateAmount: immediateAmount ? formatEther(immediateAmount as bigint) : undefined,
-    lockedAmount: lockedAmount ? formatEther(lockedAmount as bigint) : undefined,
+    totalAmount: totalAmount ? formatUnits(totalAmount as bigint, decimals) : undefined,
+    immediateAmount: immediateAmount ? formatUnits(immediateAmount as bigint, decimals) : undefined,
+    lockedAmount: lockedAmount ? formatUnits(lockedAmount as bigint, decimals) : undefined,
     goal: goal as string | undefined,
     conditionType: conditionType as number | undefined,
     immediateExecuted: immediateExecuted as boolean | undefined,
