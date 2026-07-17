@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { useAccount, useBalance, useReadContract, useWriteContract, usePublicClient } from "wagmi";
 import { useAppKit } from "@reown/appkit/react";
-import { parseEther, formatEther, erc20Abi } from "viem";
+import { parseEther, formatEther, parseUnits, formatUnits, erc20Abi } from "viem";
 import { motion, AnimatePresence } from "framer-motion";
 import OnboardingTour from "@/components/OnboardingTour";
 import { DashboardSkeleton } from "@/components/SkeletonLoaders";
@@ -123,7 +123,7 @@ export default function Home() {
     }
     if (tokenBalance !== undefined) {
       return {
-        formatted: formatEther(tokenBalance as bigint),
+        formatted: formatUnits(tokenBalance as bigint, (token === CONTRACT_ADDRESSES.USDT || token === CONTRACT_ADDRESSES.USDC) ? 6 : 18),
         symbol:
           token === CONTRACT_ADDRESSES.USDM
             ? "USDm"
@@ -134,7 +134,7 @@ export default function Home() {
             : token === CONTRACT_ADDRESSES.USDC
             ? "USDC"
             : "TOKEN",
-        decimals: 18,
+        decimals: (token === CONTRACT_ADDRESSES.USDT || token === CONTRACT_ADDRESSES.USDC) ? 6 : 18,
       };
     }
     return undefined;
@@ -246,7 +246,7 @@ export default function Home() {
           address: token as `0x${string}`,
           abi: erc20Abi,
           functionName: 'approve',
-          args: [PAYMENT_FACTORY_ADDRESS, parseEther(totalAmount)],
+          args: [PAYMENT_FACTORY_ADDRESS, parseUnits(totalAmount, (token === CONTRACT_ADDRESSES.USDT || token === CONTRACT_ADDRESSES.USDC) ? 6 : 18)],
           ...(feeCurrency ? { feeCurrency } : {})
         } as any);
         setStatus({ type: "success", message: "Waiting for approval confirmation..." });
