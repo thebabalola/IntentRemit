@@ -105,7 +105,7 @@ export default function HelpDrawer({ isOpen, onClose }: HelpDrawerProps) {
                     <p>Once you send it, you can click on the <strong>My Dashboard</strong> tab on the left sidebar.</p>
                     <ul className="list-disc pl-5 mt-2 space-y-1">
                       <li>Here, you will see a list of all the purposeful transfers you've made.</li>
-                      <li><strong>Enable Moola Market Yield:</strong> For locked ERC20 tokens (like cUSD), you will see an option to natively deposit the locked funds into Moola Market to earn real yield while the recipient waits!</li>
+                      <li><strong>Enable Moola Market Yield:</strong> For locked stablecoins (like USDm, EURm, USDT etc...), you will see an option to natively deposit the locked funds into Moola Market to earn real yield while the recipient waits!</li>
                       <li>You can see the live countdown timer for Time-Locked funds.</li>
                       <li>If you are the recipient (or testing with your own alternate wallet), this is the same dashboard where you will see the <strong>Claim Immediate</strong> button and the <strong>Unlock Vault</strong> button (which only becomes clickable once the time has passed or approvals are met).</li>
                     </ul>
